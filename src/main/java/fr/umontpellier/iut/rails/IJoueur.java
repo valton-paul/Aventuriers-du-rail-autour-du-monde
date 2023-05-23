@@ -23,6 +23,6 @@ public interface IJoueur {
     int getScore();
 
     enum CouleurJoueur {
-        JAUNE, ROUGE, BLEU, VERT, ROSE
+        JAUNE, ROUGE, BLEU, VERT, ROSE, ARGENT;
     }
 }
