@@ -2,10 +2,11 @@ package fr.umontpellier.iut.rails.vues;
 
 import fr.umontpellier.iut.rails.IJeu;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 
 /**
  * Cette classe correspond à la fenêtre principale de l'application.
@@ -19,15 +20,22 @@ import javafx.scene.layout.VBox;
 public class VueDuJeu extends BorderPane {
 
     private final IJeu jeu;
-    private VuePlateau plateau;
-    private VueAutresJoueurs autresJoueurs;
+    private final VuePlateau plateau;
 
     public VueDuJeu(IJeu jeu) {
         this.jeu = jeu;
+        HBox menusDuBas = new HBox();
         plateau = new VuePlateau();
-        autresJoueurs = new VueAutresJoueurs(jeu);
+        VueAutresJoueurs autresJoueurs = new VueAutresJoueurs(jeu);
+        VueDemarragePartie lesPioches = new VueDemarragePartie(jeu);
+
         this.setRight(autresJoueurs);
         this.setCenter(plateau);
+        this.setBottom(menusDuBas);
+
+        menusDuBas.setPadding(new Insets(10));
+        menusDuBas.setAlignment(Pos.TOP_LEFT);
+        menusDuBas.getChildren().add(lesPioches);
     }
 
     public void creerBindings() {
