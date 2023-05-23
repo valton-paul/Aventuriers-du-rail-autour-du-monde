@@ -1,12 +1,75 @@
 package fr.umontpellier.iut.rails.vues;
 
+import fr.umontpellier.iut.rails.ICarteTransport;
+import fr.umontpellier.iut.rails.IDestination;
+import fr.umontpellier.iut.rails.IJeu;
+import fr.umontpellier.iut.rails.IJoueur;
+import javafx.geometry.Insets;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 /**
  * Cette classe présente les éléments appartenant au joueur courant.
- *
+ * <p>
  * On y définit les bindings sur le joueur courant, ainsi que le listener à exécuter lorsque ce joueur change
  */
 public class VueJoueurCourant extends VBox {
+
+    public VueJoueurCourant(IJeu jeu, IJoueur j) {
+
+        VBox principal = new VBox();
+        HBox profil = new HBox();
+        principal.getChildren().add(profil);
+        this.getChildren().add(principal);
+        Label label = new Label(j.getNom() + " - " + j.getScore() + " points");
+        label.setTextFill(Color.web(getCouleur(j)));
+        label.setFont(new Font("Arial", 30));
+        profil.getChildren().add(label);
+        this.setSpacing(20);
+        this.setPadding(new Insets(0, 10, 0, 5));
+
+        // on affiche les pions du joueur
+        VBox pions = new VBox();
+        Label nbPionsWagon = new Label("Pions Wagons : " + j.getNbPionsWagon());
+        Label nbPionsBateau = new Label("Pions Bateaux : " + j.getNbPionsBateau());
+        pions.getChildren().addAll(nbPionsWagon, nbPionsBateau);
+        principal.getChildren().add(pions);
+
+        // on affiche les destinations
+        VBox destinations = new VBox();
+        int compteur = 0;
+        for (IDestination d : j.getDestinations()){
+            Label uneDestination = new Label("D" + compteur + " : " + d.getNom());
+            destinations.getChildren().add(uneDestination);
+            compteur++;
+        }
+        principal.getChildren().add(destinations);
+
+        // on affiche les cartes Wagons
+        HBox wagons = new HBox();
+        HBox bateaux = new HBox();
+        for(ICarteTransport carte : j.getCartesTransport()){
+            if(carte.estBateau()){
+                continue;
+            }
+        }
+
+    }
+
+    public String getCouleur(IJoueur j) {
+        String color = "";
+        switch (j.getCouleur()) {
+            case BLEU -> color = "BLUE";
+            case ROSE -> color = "DEEPPINK";
+            case VERT -> color = "GREEN";
+            case JAUNE -> color = "DARKGOLDENROD";
+            case ROUGE -> color = "RED";
+            case ARGENT -> color = "SILVER";
+        }
+        return color;
+    }
 
 }

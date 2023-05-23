@@ -4,11 +4,15 @@ package fr.umontpellier.iut.rails.vues;
 import fr.umontpellier.iut.rails.IJeu;
 import fr.umontpellier.iut.rails.IJoueur;
 import fr.umontpellier.iut.rails.mecanique.Joueur;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -26,27 +30,38 @@ public class VueAutresJoueurs extends VBox {
     {
         for (IJoueur j : jeu.getJoueurs())
         {
-            if(j.equals(jeu.joueurCourantProperty().get()))
-            {
-                this.getChildren().add(new VueJoueurCourant());
-            }
-            else
-            {
-                VBox principal = new VBox();
-                HBox profil = new HBox();
-                principal.getChildren().add(profil);
-                this.getChildren().add(principal);
-                Label label = new Label(j.getNom() + " - " + j.getScore() + " points");
-                label.setTextFill(Color.web(getCouleur(j)));
-                profil.getChildren().add(label);
-                label.setFont(new Font("Arial", 20));
-            }
+            VBox principal = new VBox();
+            HBox profil = new HBox();
+            principal.getChildren().add(profil);
+            this.getChildren().add(principal);
+            Label label = new Label(j.getNom() + " - " + j.getScore() + " points");
+            Label pionsWagon = new Label("Pions wagons : "+j.getNbPionsWagon());
+            Label pionsBateau = new Label("Pions bateaux : "+j.getNbPionsBateau());
+            label.setTextFill(Color.web(getCouleur(j)));
+            principal.getChildren().addAll(pionsWagon, pionsBateau);
+            profil.getChildren().add(label);
+            label.setFont(new Font("Arial", 20));
         }
         this.setSpacing(20);
-        this.setPadding(new Insets(0, 10, 0, 5));
+        //this.setPadding(new Insets(0, 10, 0, 5));
+
+        ChangeListener<IJoueur> joueurCourant = new ChangeListener<IJoueur>() {
+            @Override
+            public void changed(ObservableValue<? extends IJoueur> observableValue, IJoueur iJoueur, IJoueur t1) {
+                getChildren().remove(0);
+                VueJoueurCourant vjc = new VueJoueurCourant(jeu, t1);
+                Color backgroundColor = Color.web(getCouleur(t1));
+                Color colorWithOpacity = new Color(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue(), 0.5);
+                BackgroundFill backgroundFill = new BackgroundFill(colorWithOpacity, null, null);
+                Background background = new Background(backgroundFill);
+                vjc.setBackground(background);
+                getChildren().add(0, vjc);
+            }
+        };
+        jeu.joueurCourantProperty().addListener(joueurCourant);
     }
 
-    public String getCouleur(IJoueur j)
+    public static String getCouleur(IJoueur j)
     {
         String color = "";
         switch (j.getCouleur())
