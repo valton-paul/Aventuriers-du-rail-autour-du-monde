@@ -9,6 +9,10 @@ import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.effect.Blend;
+import javafx.scene.effect.BlendMode;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.ColorInput;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -34,7 +38,6 @@ public class VueAutresJoueurs extends VBox {
         listeJoueurOrdre = new ArrayList<>(jeu.getJoueurs());
         creationVBoxJoueurSaufCourant();
         this.setSpacing(20);
-        //this.setPadding(new Insets(0, 10, 0, 5));
 
         ChangeListener<IJoueur> joueurCourant = new ChangeListener<IJoueur>() {
             @Override

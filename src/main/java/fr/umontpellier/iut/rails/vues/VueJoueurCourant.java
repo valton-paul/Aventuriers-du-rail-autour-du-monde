@@ -31,11 +31,12 @@ public class VueJoueurCourant extends VBox {
         this.setSpacing(20);
         this.setPadding(new Insets(0, 10, 0, 5));
 
-        // on affiche les pions du joueur
+        // on affiche les pions du joueur (+ le nb de ports)
         VBox pions = new VBox();
         Label nbPionsWagon = new Label("Pions Wagons : " + j.getNbPionsWagon());
         Label nbPionsBateau = new Label("Pions Bateaux : " + j.getNbPionsBateau());
-        pions.getChildren().addAll(nbPionsWagon, nbPionsBateau);
+        Label nbPorts = new Label("Ports : " + j.getNbPorts());
+        pions.getChildren().addAll(nbPionsWagon, nbPionsBateau, nbPorts);
         principal.getChildren().add(pions);
 
         // on affiche les destinations
