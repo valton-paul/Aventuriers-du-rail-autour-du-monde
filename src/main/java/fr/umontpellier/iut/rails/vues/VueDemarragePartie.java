@@ -8,12 +8,15 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+
+import java.util.ArrayList;
 
 public class VueDemarragePartie extends HBox {
 
@@ -66,9 +69,6 @@ public class VueDemarragePartie extends HBox {
         garder.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                instructionsEtPasser.getChildren().remove(garder);
-                getChildren().remove(choixDesDestinations);
-                getChildren().add(ecrire);
                 ((VueDuJeu) getScene().getRoot()).getJeu().passerAEteChoisi();
             }
         });
@@ -81,31 +81,40 @@ public class VueDemarragePartie extends HBox {
                 {
                     for(IDestination destination : change.getAddedSubList())
                     {
-                        choixDesDestinations.getChildren().add(new VueDestination(destination));
+                        VueDestination d = new VueDestination(destination);
+                        d.createBindings();
+                        choixDesDestinations.getChildren().add(d);
                     }
                 }
                 else if(change.wasRemoved())
                 {
-                    choixDesDestinations.getChildren().clear();
+                    ArrayList<Node> removeList = new ArrayList<>();
+                    for(IDestination destination : change.getRemoved())
+                    {
+                        for(Node node : choixDesDestinations.getChildren())
+                        {
+                            VueDestination v = (VueDestination) node;
+                            if(v.getDestination().equals(destination)) removeList.add(node);
+                        }
+                    }
+                    choixDesDestinations.getChildren().removeAll(removeList);
+                }
+                if(((VueDuJeu) getScene().getRoot()).getJeu().destinationsInitialesProperty().isEmpty() && !getChildren().contains(ecrire))
+                {
+                    getChildren().add(ecrire);
                 }
             }
         });
 
-        zoneDeTexte.setOnAction(new EventHandler<ActionEvent>() {
+        EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 ((VueDuJeu) getScene().getRoot()).getJeu().leNombreDePionsSouhaiteAEteRenseigne(zoneDeTexte.getText());
-                instructionsEtPasser.getChildren().add(garder);
                 getChildren().remove(ecrire);
-                getChildren().add(choixDesDestinations);
+                if(!getChildren().contains(choixDesDestinations)) getChildren().add(choixDesDestinations);
             }
-        });
-
-        valider.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                ((VueDuJeu) getScene().getRoot()).getJeu().leNombreDePionsSouhaiteAEteRenseigne(zoneDeTexte.getText());
-            }
-        });
+        };
+        zoneDeTexte.setOnAction(event);
+        valider.setOnAction(event);
     }
 }

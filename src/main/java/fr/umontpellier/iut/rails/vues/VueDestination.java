@@ -2,6 +2,8 @@ package fr.umontpellier.iut.rails.vues;
 
 import fr.umontpellier.iut.rails.IDestination;
 import fr.umontpellier.iut.rails.mecanique.data.Ville;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 
@@ -23,6 +25,16 @@ public class VueDestination extends Button {
         }
         nomDestination.append("\n Points : ").append(destination.getValeur());
         this.setText(nomDestination.toString());
+    }
+
+    public void createBindings()
+    {
+        this.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                ((VueDuJeu) getScene().getRoot()).getJeu().uneDestinationAEteChoisie(destination);
+            }
+        });
     }
 
     public IDestination getDestination() {
