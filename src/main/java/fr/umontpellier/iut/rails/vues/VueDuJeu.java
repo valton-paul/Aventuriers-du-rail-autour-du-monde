@@ -24,6 +24,7 @@ public class VueDuJeu extends BorderPane {
     private final VuePlateau plateau;
     private VueAutresJoueurs autresJoueurs;
     private VueDemarragePartie initialisation;
+    private VuePioche pioches;
 
     public VueDuJeu(IJeu jeu) {
         this.jeu = jeu;
@@ -31,7 +32,7 @@ public class VueDuJeu extends BorderPane {
         plateau = new VuePlateau();
         autresJoueurs = new VueAutresJoueurs(jeu);
         initialisation = new VueDemarragePartie();
-
+        pioches = new VuePioche(jeu);
 
         this.setRight(autresJoueurs);
         this.setCenter(plateau);
@@ -40,7 +41,7 @@ public class VueDuJeu extends BorderPane {
         menusDuBas.setPadding(new Insets(10));
         menusDuBas.setAlignment(Pos.TOP_LEFT);
         menusDuBas.getChildren().add(initialisation);
-        menusDuBas.getChildren().add(new VuePioche(jeu));
+        menusDuBas.getChildren().add(pioches);
     }
 
     public void creerBindings() {

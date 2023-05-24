@@ -2,8 +2,10 @@ package fr.umontpellier.iut.rails.vues;
 
 import fr.umontpellier.iut.rails.IDestination;
 import fr.umontpellier.iut.rails.IJeu;
+import fr.umontpellier.iut.rails.mecanique.data.Destination;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -16,8 +18,9 @@ import javafx.scene.layout.VBox;
 public class VueDemarragePartie extends HBox {
 
     private VBox instructionsEtPasser;
-    private HBox choixDesDestinations;
+    private VBox choixDesDestinations;
     private HBox ecrire;
+    private Button garder;
     private Button passer;
     private Button valider;
     private Label instruction;
@@ -25,17 +28,18 @@ public class VueDemarragePartie extends HBox {
 
     public VueDemarragePartie() {
         instructionsEtPasser = new VBox();
-        choixDesDestinations = new HBox();
+        choixDesDestinations = new VBox();
         ecrire = new HBox();
         valider = new Button("Valider");
-        passer = new Button("Passer");
+        garder = new Button("Passer");
         instruction = new Label();
         zoneDeTexte = new TextField();
+        passer = new Button("Passer");
 
         ecrire.getChildren().addAll(zoneDeTexte, valider);
         this.getChildren().add(instructionsEtPasser);
         this.getChildren().add(choixDesDestinations);
-        instructionsEtPasser.getChildren().addAll(instruction, passer);
+        instructionsEtPasser.getChildren().addAll(instruction, garder);
 
         this.setSpacing(20);
         instructionsEtPasser.setSpacing(20);
@@ -44,6 +48,15 @@ public class VueDemarragePartie extends HBox {
     }
 
     public void createBindings() {
+        ((VueDuJeu) getScene().getRoot()).getJeu().jeuEnPreparationProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+                getChildren().remove(choixDesDestinations);
+                getChildren().remove(choixDesDestinations);
+                getChildren().remove(ecrire);
+            }
+        });
+
         ((VueDuJeu) getScene().getRoot()).getJeu().instructionProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
@@ -51,11 +64,30 @@ public class VueDemarragePartie extends HBox {
             }
         });
 
-        passer.setOnAction(new EventHandler<ActionEvent>() {
+        garder.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                instructionsEtPasser.getChildren().remove(passer);
-                getChildren().add(ecrire);
+                instructionsEtPasser.getChildren().remove(garder);
+                getChildren().remove(choixDesDestinations);
+                ((VueDuJeu) getScene().getRoot()).getJeu().passerAEteChoisi();
+            }
+        });
+
+        ((VueDuJeu) getScene().getRoot()).getJeu().destinationsInitialesProperty().addListener(new ListChangeListener<IDestination>() {
+            @Override
+            public void onChanged(Change<? extends IDestination> change) {
+                change.next();
+                if(change.wasAdded())
+                {
+                    for(IDestination destination : change.getAddedSubList())
+                    {
+                        choixDesDestinations.getChildren().add(new VueDestination(destination));
+                    }
+                }
+                else if(change.wasRemoved())
+                {
+                    choixDesDestinations.getChildren().clear();
+                }
             }
         });
 
@@ -63,6 +95,9 @@ public class VueDemarragePartie extends HBox {
             @Override
             public void handle(ActionEvent actionEvent) {
                 ((VueDuJeu) getScene().getRoot()).getJeu().leNombreDePionsSouhaiteAEteRenseigne(zoneDeTexte.getText());
+                instructionsEtPasser.getChildren().add(garder);
+                getChildren().remove(ecrire);
+                getChildren().add(choixDesDestinations);
             }
         });
 
