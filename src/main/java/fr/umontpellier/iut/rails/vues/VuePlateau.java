@@ -58,6 +58,7 @@ public class VuePlateau extends Pane {
             DonneesGraphiques.DonneesCerclesPorts positionPortSurPlateau = DonneesGraphiques.ports.get(nomPort);
             Circle cerclePort = new Circle(positionPortSurPlateau.centreX(), positionPortSurPlateau.centreY(), DonneesGraphiques.rayonInitial);
             cerclePort.setId(nomPort);
+            cerclePort.setOpacity(0);
             getChildren().add(cerclePort);
             bindCerclePortAuPlateau(positionPortSurPlateau, cerclePort);
             cerclePort.setOnMouseClicked(choixPort);
@@ -73,6 +74,7 @@ public class VuePlateau extends Pane {
                 Rectangle rectangleSegment = new Rectangle(unSegment.getXHautGauche(), unSegment.getYHautGauche(), DonneesGraphiques.largeurRectangle, DonneesGraphiques.hauteurRectangle);
                 rectangleSegment.setId(nomRoute);
                 rectangleSegment.setRotate(unSegment.getAngle());
+                rectangleSegment.setOpacity(0);
                 getChildren().add(rectangleSegment);
                 rectangleSegment.setOnMouseClicked(choixRoute);
                 bindRectangle(rectangleSegment, unSegment.getXHautGauche(), unSegment.getYHautGauche());
