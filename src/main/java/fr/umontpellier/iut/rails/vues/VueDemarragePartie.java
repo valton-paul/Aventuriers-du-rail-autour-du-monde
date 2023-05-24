@@ -51,13 +51,6 @@ public class VueDemarragePartie extends HBox {
     }
 
     public void createBindings() {
-        ((VueDuJeu) getScene().getRoot()).getJeu().jeuEnPreparationProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
-                getChildren().remove(choixDesDestinations);
-                getChildren().remove(ecrire);
-            }
-        });
 
         ((VueDuJeu) getScene().getRoot()).getJeu().instructionProperty().addListener(new ChangeListener<String>() {
             @Override

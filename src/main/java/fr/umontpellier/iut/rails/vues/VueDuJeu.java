@@ -1,13 +1,17 @@
 package fr.umontpellier.iut.rails.vues;
 
 import fr.umontpellier.iut.rails.IJeu;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 /**
  * Cette classe correspond à la fenêtre principale de l'application.
@@ -25,14 +29,19 @@ public class VueDuJeu extends BorderPane {
     private VueAutresJoueurs autresJoueurs;
     private VueDemarragePartie initialisation;
     private VuePioche pioches;
+    private HBox menusDuBas;
+    private VBox choixEtInstruction;
+    private Label instructions;
 
     public VueDuJeu(IJeu jeu) {
         this.jeu = jeu;
-        HBox menusDuBas = new HBox();
+        menusDuBas = new HBox();
         plateau = new VuePlateau();
         autresJoueurs = new VueAutresJoueurs(jeu);
         initialisation = new VueDemarragePartie();
         pioches = new VuePioche(jeu);
+        instructions = new Label();
+        choixEtInstruction = new VBox(); //Pour des boutons pions et les instructions
 
         this.setRight(autresJoueurs);
         this.setCenter(plateau);
@@ -41,7 +50,6 @@ public class VueDuJeu extends BorderPane {
         menusDuBas.setPadding(new Insets(10));
         menusDuBas.setAlignment(Pos.TOP_LEFT);
         menusDuBas.getChildren().add(initialisation);
-        menusDuBas.getChildren().add(pioches);
     }
 
     public void creerBindings() {
@@ -49,6 +57,20 @@ public class VueDuJeu extends BorderPane {
         plateau.prefHeightProperty().bind(getScene().heightProperty());
         plateau.creerBindings();
         initialisation.createBindings();
+
+        ((VueDuJeu) getScene().getRoot()).getJeu().instructionProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                instructions.setText(t1);
+            }
+        });
+        ((VueDuJeu) getScene().getRoot()).getJeu().jeuEnPreparationProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+                menusDuBas.getChildren().remove(initialisation);
+                menusDuBas.getChildren().addAll(instructions ,pioches);
+            }
+        });
     }
 
     public IJeu getJeu() {
