@@ -18,7 +18,7 @@ import javafx.scene.layout.VBox;
 public class VueDemarragePartie extends HBox {
 
     private VBox instructionsEtPasser;
-    private VBox choixDesDestinations;
+    private HBox choixDesDestinations;
     private HBox ecrire;
     private Button garder;
     private Button passer;
@@ -28,7 +28,7 @@ public class VueDemarragePartie extends HBox {
 
     public VueDemarragePartie() {
         instructionsEtPasser = new VBox();
-        choixDesDestinations = new VBox();
+        choixDesDestinations = new HBox();
         ecrire = new HBox();
         valider = new Button("Valider");
         garder = new Button("Passer");
@@ -52,7 +52,6 @@ public class VueDemarragePartie extends HBox {
             @Override
             public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
                 getChildren().remove(choixDesDestinations);
-                getChildren().remove(choixDesDestinations);
                 getChildren().remove(ecrire);
             }
         });
@@ -69,6 +68,7 @@ public class VueDemarragePartie extends HBox {
             public void handle(ActionEvent actionEvent) {
                 instructionsEtPasser.getChildren().remove(garder);
                 getChildren().remove(choixDesDestinations);
+                getChildren().add(ecrire);
                 ((VueDuJeu) getScene().getRoot()).getJeu().passerAEteChoisi();
             }
         });
