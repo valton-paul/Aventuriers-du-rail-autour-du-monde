@@ -36,13 +36,19 @@ public class VuePioche extends HBox {
         if (!jeu.piocheWagonVideProperty().getValue()) {
             Image wagon = new Image("images/cartesWagons/dos-WAGON.png");
             ImageView piocheWagon = new ImageView(wagon);
+            piocheWagon.setFitHeight(120);
+            piocheWagon.setPreserveRatio(true);
             this.getChildren().add(piocheWagon);
         }
 
         if (!jeu.piocheBateauVideProperty().getValue()) {
             Image bateau = new Image("images/cartesWagons/dos-BATEAU.png");
             ImageView piocheBateau = new ImageView(bateau);
+            piocheBateau.setFitHeight(120);
+            piocheBateau.setPreserveRatio(true);
             this.getChildren().add(piocheBateau);
         }
+
+        this.setSpacing(20);
     }
 }
