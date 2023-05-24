@@ -4,6 +4,7 @@ import fr.umontpellier.iut.rails.ICarteTransport;
 import fr.umontpellier.iut.rails.IDestination;
 import fr.umontpellier.iut.rails.IJeu;
 import fr.umontpellier.iut.rails.IJoueur;
+import fr.umontpellier.iut.rails.mecanique.data.Ville;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -43,7 +44,11 @@ public class VueJoueurCourant extends VBox {
         VBox destinations = new VBox();
         int compteur = 0;
         for (IDestination d : j.getDestinations()){
-            Label uneDestination = new Label("D" + compteur + " : " + d.getNom());
+            String villesDest = "D" + compteur;
+            for(String v : d.getVilles()){
+                villesDest += v + " - ";
+            }
+            Label uneDestination = new Label(villesDest);
             destinations.getChildren().add(uneDestination);
             compteur++;
         }

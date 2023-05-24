@@ -16,6 +16,10 @@ public class VueCarteTransport extends Pane {
         this.carteTransport = carteTransport;
     }
 
+
+
+
+
     public ICarteTransport getCarteTransport() {
         return carteTransport;
     }
