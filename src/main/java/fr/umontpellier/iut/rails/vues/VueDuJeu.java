@@ -31,7 +31,6 @@ public class VueDuJeu extends BorderPane {
     private VuePioche pioches;
     private HBox menusDuBas;
     private VBox choixEtInstruction;
-    private Label instructions;
 
     public VueDuJeu(IJeu jeu) {
         this.jeu = jeu;
@@ -40,7 +39,6 @@ public class VueDuJeu extends BorderPane {
         autresJoueurs = new VueAutresJoueurs(jeu);
         initialisation = new VueDemarragePartie();
         pioches = new VuePioche(jeu);
-        instructions = new Label();
         choixEtInstruction = new VBox(); //Pour des boutons pions et les instructions
 
         this.setRight(autresJoueurs);
@@ -58,17 +56,12 @@ public class VueDuJeu extends BorderPane {
         plateau.creerBindings();
         initialisation.createBindings();
 
-        ((VueDuJeu) getScene().getRoot()).getJeu().instructionProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                instructions.setText(t1);
-            }
-        });
         ((VueDuJeu) getScene().getRoot()).getJeu().jeuEnPreparationProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
                 menusDuBas.getChildren().remove(initialisation);
-                menusDuBas.getChildren().addAll(instructions ,pioches);
+                menusDuBas.getChildren().add(pioches);
+                pioches.createBindings();
             }
         });
     }

@@ -46,7 +46,7 @@ public class VueAutresJoueurs extends VBox {
                 listeJoueurOrdre.remove(t1);
                 creationVBoxJoueurSaufCourant();
                 listeJoueurOrdre.add(t1);
-                VueJoueurCourant vjc = new VueJoueurCourant(jeu, t1);
+                VueJoueurCourant vjc = new VueJoueurCourant(jeu);
                 Color backgroundColor = Color.web(getCouleur(t1));
                 Color colorWithOpacity = new Color(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue(), 0.5);
                 BackgroundFill backgroundFill = new BackgroundFill(colorWithOpacity, null, null);

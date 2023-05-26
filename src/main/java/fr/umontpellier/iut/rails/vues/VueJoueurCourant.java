@@ -19,14 +19,14 @@ import javafx.scene.text.Font;
  */
 public class VueJoueurCourant extends VBox {
 
-    public VueJoueurCourant(IJeu jeu, IJoueur j) {
+    public VueJoueurCourant(IJeu jeu) {
 
         VBox principal = new VBox();
         HBox profil = new HBox();
         principal.getChildren().add(profil);
         this.getChildren().add(principal);
-        Label label = new Label(j.getNom() + " - " + j.getScore() + " points");
-        label.setTextFill(Color.web(getCouleur(j)));
+        Label label = new Label(jeu.joueurCourantProperty().get().getNom() + " - " + jeu.joueurCourantProperty().get().getScore() + " points");
+        label.setTextFill(Color.web(getCouleur(jeu.joueurCourantProperty().get())));
         label.setFont(new Font("Arial", 30));
         profil.getChildren().add(label);
         this.setSpacing(20);
@@ -34,16 +34,16 @@ public class VueJoueurCourant extends VBox {
 
         // on affiche les pions du joueur (+ le nb de ports)
         VBox pions = new VBox();
-        Label nbPionsWagon = new Label("Pions Wagons : " + j.getNbPionsWagon());
-        Label nbPionsBateau = new Label("Pions Bateaux : " + j.getNbPionsBateau());
-        Label nbPorts = new Label("Ports : " + j.getNbPorts());
+        Label nbPionsWagon = new Label("Pions Wagons : " + jeu.joueurCourantProperty().get().getNbPionsWagon());
+        Label nbPionsBateau = new Label("Pions Bateaux : " + jeu.joueurCourantProperty().get().getNbPionsBateau());
+        Label nbPorts = new Label("Ports : " + jeu.joueurCourantProperty().get().getNbPorts());
         pions.getChildren().addAll(nbPionsWagon, nbPionsBateau, nbPorts);
         principal.getChildren().add(pions);
 
         // on affiche les destinations
         VBox destinations = new VBox();
         int compteur = 0;
-        for (IDestination d : j.getDestinations()){
+        for (IDestination d : jeu.joueurCourantProperty().get().getDestinations()){
             String villesDest = "D" + compteur;
             for(String v : d.getVilles()){
                 villesDest += v + " - ";
@@ -57,7 +57,7 @@ public class VueJoueurCourant extends VBox {
         // on affiche les cartes Wagons
         HBox wagons = new HBox();
         HBox bateaux = new HBox();
-        for(ICarteTransport carte : j.getCartesTransport()){
+        for(ICarteTransport carte : jeu.joueurCourantProperty().get().getCartesTransport()){
             if(carte.estBateau()){
                 continue;
             }
