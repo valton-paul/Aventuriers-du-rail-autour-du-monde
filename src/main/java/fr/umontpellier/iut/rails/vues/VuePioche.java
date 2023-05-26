@@ -12,44 +12,30 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 
 import java.io.File;
 
-public class VuePioche extends HBox {
+public class VuePioche extends VBox {
+    private HBox toutSafuInstruction;
     private VBox sixCartes;
     private HBox premiereLigne;
     private HBox deuxiemeLigne;
     private Label instructions;
-    private VBox leftInfo;
 
     public VuePioche(IJeu jeu) {
-
-
         // on ajoute les 6 cartes de la pioches visibles
         sixCartes = new VBox();
         premiereLigne = new HBox();
         deuxiemeLigne = new HBox();
         instructions = new Label();
-        leftInfo = new VBox();
-        leftInfo.getChildren().add(instructions);
+        instructions.setFont(new Font("Arial", 30));
 
-        this.getChildren().add(leftInfo);
-        // on ajoute les pioches
-        if (!jeu.piocheWagonVideProperty().getValue()) {
-            Image wagon = new Image("images/cartesWagons/dos-WAGON.png");
-            ImageView piocheWagon = new ImageView(wagon);
-            piocheWagon.setFitHeight(175);
-            piocheWagon.setPreserveRatio(true);
-            this.getChildren().add(piocheWagon);
-        }
+        toutSafuInstruction = new HBox();
 
-        if (!jeu.piocheBateauVideProperty().getValue()) {
-            Image bateau = new Image("images/cartesWagons/dos-BATEAU.png");
-            ImageView piocheBateau = new ImageView(bateau);
-            piocheBateau.setFitHeight(175);
-            piocheBateau.setPreserveRatio(true);
-            this.getChildren().add(piocheBateau);
-        }
+        this.getChildren().add(instructions);
+        this.getChildren().add(toutSafuInstruction);
+
 
         // ajout des boutons pions
         Button pionsWagon = new Button();
@@ -67,18 +53,43 @@ public class VuePioche extends HBox {
         pionsWagon.setGraphic(pionswagon);
         pionsBateau.setGraphic(pionsbateau);
 
-        leftInfo.getChildren().addAll(pionsWagon, pionsBateau);
-        leftInfo.setSpacing(20);
+        VBox les2Pions = new VBox();
+        les2Pions.setAlignment(Pos.CENTER);
+        les2Pions.getChildren().addAll(pionsWagon, pionsBateau);
+
+        toutSafuInstruction.getChildren().add(les2Pions);
+
+
+
+        // on ajoute les pioches
+        if (!jeu.piocheWagonVideProperty().getValue()) {
+            Image wagoncarte = new Image("images/cartesWagons/dos-WAGON.png");
+            ImageView piocheWagon = new ImageView(wagoncarte);
+            piocheWagon.setFitHeight(175);
+            piocheWagon.setPreserveRatio(true);
+            toutSafuInstruction.getChildren().add(piocheWagon);
+        }
+
+        if (!jeu.piocheBateauVideProperty().getValue()) {
+            Image bateaucarte = new Image("images/cartesWagons/dos-BATEAU.png");
+            ImageView piocheBateau = new ImageView(bateaucarte);
+            piocheBateau.setFitHeight(175);
+            piocheBateau.setPreserveRatio(true);
+            toutSafuInstruction.getChildren().add(piocheBateau);
+        }
+
+
+        toutSafuInstruction.setSpacing(20);
 
 
 
 
+        toutSafuInstruction.setAlignment(Pos.CENTER);
         this.setAlignment(Pos.CENTER);
-        leftInfo.setAlignment(Pos.CENTER);
 
-        this.setSpacing(20);
+        toutSafuInstruction.setSpacing(20);
         sixCartes.getChildren().addAll(premiereLigne, deuxiemeLigne);
-        this.getChildren().add(sixCartes);
+        toutSafuInstruction.getChildren().add(sixCartes);
     }
 
 
