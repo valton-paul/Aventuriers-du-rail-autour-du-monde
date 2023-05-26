@@ -56,6 +56,7 @@ public class VueDuJeu extends BorderPane {
         plateau.creerBindings();
         initialisation.createBindings();
 
+
         ((VueDuJeu) getScene().getRoot()).getJeu().jeuEnPreparationProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {

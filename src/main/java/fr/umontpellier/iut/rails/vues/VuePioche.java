@@ -70,9 +70,6 @@ public class VuePioche extends HBox {
         leftInfo.getChildren().addAll(pionsWagon, pionsBateau);
         leftInfo.setSpacing(20);
 
-
-
-
         this.setAlignment(Pos.CENTER);
         leftInfo.setAlignment(Pos.CENTER);
 
@@ -83,6 +80,7 @@ public class VuePioche extends HBox {
 
 
     public void createBindings() {
+
         ((VueDuJeu) getScene().getRoot()).getJeu().cartesTransportVisiblesProperty().addListener(new ListChangeListener<ICarteTransport>() {
             @Override
             public void onChanged(Change<? extends ICarteTransport> change) {
@@ -90,10 +88,12 @@ public class VuePioche extends HBox {
                 if (change.wasAdded()) {
                     int compteur = 0;
                     for (ICarteTransport cartes : change.getAddedSubList()) {
+                        VueCarteTransport actCarte = new VueCarteTransport(cartes, 1);
+                        actCarte.createBinding();
                         if(compteur%2 == 0){
-                            premiereLigne.getChildren().add(new VueCarteTransport(cartes, 1));
+                            premiereLigne.getChildren().add(actCarte);
                         }else {
-                            deuxiemeLigne.getChildren().add(new VueCarteTransport(cartes, 1));
+                            deuxiemeLigne.getChildren().add(actCarte);
                         }
                         compteur++;
                     }
