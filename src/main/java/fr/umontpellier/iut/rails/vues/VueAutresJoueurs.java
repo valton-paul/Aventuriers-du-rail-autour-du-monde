@@ -66,7 +66,7 @@ public class VueAutresJoueurs extends VBox {
             HBox profil = new HBox();
             principal.getChildren().add(profil);
             this.getChildren().add(principal);
-            Label label = new Label(j.getNom() + " - " + j.getScore() + " points");
+            Label label = new Label(j.getNom() + " | " + j.getScore() + " points");
             Label pionsWagon = new Label("Pions wagons : "+j.getNbPionsWagon());
             Label pionsBateau = new Label("Pions bateaux : "+j.getNbPionsBateau());
             label.setTextFill(Color.web(getCouleur(j)));

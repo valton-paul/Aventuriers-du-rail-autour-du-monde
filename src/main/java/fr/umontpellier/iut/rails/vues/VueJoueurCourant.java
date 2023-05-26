@@ -25,7 +25,7 @@ public class VueJoueurCourant extends VBox {
         HBox profil = new HBox();
         principal.getChildren().add(profil);
         this.getChildren().add(principal);
-        Label label = new Label(jeu.joueurCourantProperty().get().getNom() + " - " + jeu.joueurCourantProperty().get().getScore() + " points");
+        Label label = new Label(jeu.joueurCourantProperty().get().getNom() + " | " + jeu.joueurCourantProperty().get().getScore() + " points");
         label.setTextFill(Color.web(getCouleur(jeu.joueurCourantProperty().get())));
         label.setFont(new Font("Arial", 30));
         profil.getChildren().add(label);

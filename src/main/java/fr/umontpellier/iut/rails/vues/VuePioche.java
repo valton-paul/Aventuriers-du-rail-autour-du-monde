@@ -1,13 +1,18 @@
 package fr.umontpellier.iut.rails.vues;
 
 import fr.umontpellier.iut.rails.ICarteTransport;
+import fr.umontpellier.iut.rails.IDestination;
 import fr.umontpellier.iut.rails.IJeu;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -15,6 +20,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public class VuePioche extends VBox {
     private HBox toutSafuInstruction;
@@ -22,6 +28,12 @@ public class VuePioche extends VBox {
     private HBox premiereLigne;
     private HBox deuxiemeLigne;
     private Label instructions;
+    private Button pionsWagon;
+    private Button pionsBateau;
+    private Button piocheWagonButton;
+    private Button piocheBateauButton;
+    private TextField saisiePions;
+
 
     public VuePioche(IJeu jeu) {
         // on ajoute les 6 cartes de la pioches visibles
@@ -30,6 +42,9 @@ public class VuePioche extends VBox {
         deuxiemeLigne = new HBox();
         instructions = new Label();
         instructions.setFont(new Font("Arial", 30));
+        piocheWagonButton = new Button();
+        piocheBateauButton = new Button();
+        saisiePions = new TextField();
 
         toutSafuInstruction = new HBox();
 
@@ -38,8 +53,8 @@ public class VuePioche extends VBox {
 
 
         // ajout des boutons pions
-        Button pionsWagon = new Button();
-        Button pionsBateau = new Button();
+        pionsWagon = new Button();
+        pionsBateau = new Button();
 
         Image bateau = new Image("images/bouton-pions-bateau.png");
         Image wagon = new Image("images/bouton-pions-wagon.png");
@@ -60,14 +75,15 @@ public class VuePioche extends VBox {
         toutSafuInstruction.getChildren().add(les2Pions);
 
 
-
         // on ajoute les pioches
         if (!jeu.piocheWagonVideProperty().getValue()) {
             Image wagoncarte = new Image("images/cartesWagons/dos-WAGON.png");
             ImageView piocheWagon = new ImageView(wagoncarte);
             piocheWagon.setFitHeight(175);
             piocheWagon.setPreserveRatio(true);
-            toutSafuInstruction.getChildren().add(piocheWagon);
+            piocheWagonButton.setGraphic(piocheWagon);
+            toutSafuInstruction.getChildren().add(piocheWagonButton);
+
         }
 
         if (!jeu.piocheBateauVideProperty().getValue()) {
@@ -75,13 +91,12 @@ public class VuePioche extends VBox {
             ImageView piocheBateau = new ImageView(bateaucarte);
             piocheBateau.setFitHeight(175);
             piocheBateau.setPreserveRatio(true);
-            toutSafuInstruction.getChildren().add(piocheBateau);
+            piocheBateauButton.setGraphic(piocheBateau);
+            toutSafuInstruction.getChildren().add(piocheBateauButton);
         }
 
 
         toutSafuInstruction.setSpacing(20);
-
-
 
 
         toutSafuInstruction.setAlignment(Pos.CENTER);
@@ -94,22 +109,68 @@ public class VuePioche extends VBox {
 
 
     public void createBindings() {
+
+        saisiePions.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                if (!saisiePions.getText().isEmpty()) {
+                    ((VueDuJeu) getScene().getRoot()).getJeu().leNombreDePionsSouhaiteAEteRenseigne(saisiePions.getText());
+                    getChildren().remove(1);
+                }
+            }
+        });
+
+        piocheWagonButton.setOnAction(actionEvent ->
+        {
+            ((VueDuJeu) getScene().getRoot()).getJeu().uneCarteWagonAEtePiochee();
+        });
+
+        piocheBateauButton.setOnAction(actionEvent ->
+        {
+            ((VueDuJeu) getScene().getRoot()).getJeu().uneCarteBateauAEtePiochee();
+        });
+
+
+        pionsWagon.setOnAction(actionEvent ->
+        {
+            ((VueDuJeu) getScene().getRoot()).getJeu().nouveauxPionsWagonsDemandes();
+            if(!this.getChildren().contains(saisiePions))this.getChildren().add(1, saisiePions);
+        });
+
+        pionsBateau.setOnAction(actionEvent ->
+        {
+            ((VueDuJeu) getScene().getRoot()).getJeu().nouveauxPionsBateauxDemandes();
+            if(!this.getChildren().contains(saisiePions))this.getChildren().add(1, saisiePions);
+        });
+
         ((VueDuJeu) getScene().getRoot()).getJeu().cartesTransportVisiblesProperty().addListener(new ListChangeListener<ICarteTransport>() {
             @Override
             public void onChanged(Change<? extends ICarteTransport> change) {
                 change.next();
                 if (change.wasAdded()) {
-                    int compteur = 0;
                     for (ICarteTransport cartes : change.getAddedSubList()) {
                         VueCarteTransport vueTransport = new VueCarteTransport(cartes, 1);
                         vueTransport.createBinding();
-                        if(compteur%2 == 0){
+                        if (premiereLigne.getChildren().size() < deuxiemeLigne.getChildren().size()) {
                             premiereLigne.getChildren().add(vueTransport);
-                        }else {
+                        } else {
                             deuxiemeLigne.getChildren().add(vueTransport);
                         }
-                        compteur++;
                     }
+                } else if (change.wasRemoved()) {
+                    ArrayList<Node> removeList = new ArrayList<>();
+                    for (ICarteTransport carte : change.getRemoved()) {
+                        for (Node node : premiereLigne.getChildren()) {
+                            VueCarteTransport v = (VueCarteTransport) node;
+                            if (v.getCarteTransport().equals(carte)) removeList.add(node);
+                        }
+                        for (Node node : deuxiemeLigne.getChildren()) {
+                            VueCarteTransport v = (VueCarteTransport) node;
+                            if (v.getCarteTransport().equals(carte)) removeList.add(node);
+                        }
+                    }
+                    premiereLigne.getChildren().removeAll(removeList);
+                    deuxiemeLigne.getChildren().removeAll(removeList);
                 }
             }
         });
