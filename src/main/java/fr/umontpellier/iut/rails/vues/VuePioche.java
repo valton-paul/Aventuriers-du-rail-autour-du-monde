@@ -8,6 +8,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -45,8 +46,18 @@ public class VuePioche extends VBox {
         piocheWagonButton = new Button();
         piocheBateauButton = new Button();
         saisiePions = new TextField();
+        saisiePions.setStyle("-fx-border-color: black; -fx-border-radius: 0px; -fx-font-size: 20;");
+        saisiePions.setMaxWidth(100);
+        saisiePions.setMinHeight(50);
+        saisiePions.setAlignment(Pos.CENTER);
 
         toutSafuInstruction = new HBox();
+        toutSafuInstruction.setStyle("-fx-border-color: black; -fx-border-radius: 5px;");
+        toutSafuInstruction.setSpacing(10);
+        premiereLigne.setSpacing(10);
+        deuxiemeLigne.setSpacing(10);
+
+
 
         this.getChildren().add(instructions);
         this.getChildren().add(toutSafuInstruction);
@@ -60,15 +71,16 @@ public class VuePioche extends VBox {
         Image wagon = new Image("images/bouton-pions-wagon.png");
         ImageView pionsbateau = new ImageView(bateau);
         ImageView pionswagon = new ImageView(wagon);
-        pionsbateau.setFitHeight(50);
+        pionsbateau.setFitHeight(75);
         pionsbateau.setPreserveRatio(true);
-        pionswagon.setFitHeight(50);
+        pionswagon.setFitHeight(75);
         pionswagon.setPreserveRatio(true);
 
         pionsWagon.setGraphic(pionswagon);
         pionsBateau.setGraphic(pionsbateau);
 
         VBox les2Pions = new VBox();
+        les2Pions.setSpacing(10);
         les2Pions.setAlignment(Pos.CENTER);
         les2Pions.getChildren().addAll(pionsWagon, pionsBateau);
 
@@ -101,6 +113,7 @@ public class VuePioche extends VBox {
 
         toutSafuInstruction.setAlignment(Pos.CENTER);
         this.setAlignment(Pos.CENTER);
+        this.setSpacing(20);
 
         toutSafuInstruction.setSpacing(20);
         sixCartes.getChildren().addAll(premiereLigne, deuxiemeLigne);
@@ -115,7 +128,7 @@ public class VuePioche extends VBox {
             public void handle(ActionEvent actionEvent) {
                 if (!saisiePions.getText().isEmpty()) {
                     ((VueDuJeu) getScene().getRoot()).getJeu().leNombreDePionsSouhaiteAEteRenseigne(saisiePions.getText());
-                    getChildren().remove(1);
+                    getChildren().remove(1); // faudra vérifier que on ai rentré un nb de pions valide
                 }
             }
         });
