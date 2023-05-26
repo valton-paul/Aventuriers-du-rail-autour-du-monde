@@ -101,10 +101,12 @@ public class VuePioche extends VBox {
                 if (change.wasAdded()) {
                     int compteur = 0;
                     for (ICarteTransport cartes : change.getAddedSubList()) {
+                        VueCarteTransport vueTransport = new VueCarteTransport(cartes, 1);
+                        vueTransport.createBinding();
                         if(compteur%2 == 0){
-                            premiereLigne.getChildren().add(new VueCarteTransport(cartes, 1));
+                            premiereLigne.getChildren().add(vueTransport);
                         }else {
-                            deuxiemeLigne.getChildren().add(new VueCarteTransport(cartes, 1));
+                            deuxiemeLigne.getChildren().add(vueTransport);
                         }
                         compteur++;
                     }
