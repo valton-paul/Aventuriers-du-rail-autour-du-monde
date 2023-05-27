@@ -90,7 +90,6 @@ public class VueAutresJoueurs extends VBox {
             case VERT -> color = "GREEN";
             case JAUNE -> color = "DARKGOLDENROD";
             case ROUGE -> color = "RED";
-            case ARGENT -> color = "SILVER";
         }
         return color;
     }

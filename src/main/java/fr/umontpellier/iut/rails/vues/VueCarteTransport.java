@@ -24,8 +24,8 @@ public class VueCarteTransport extends Button {
         estDansLaMain = main;
 
         StringBuilder nomCarte = new StringBuilder().append("carte-");
-        if(carteTransport.estBateau()) nomCarte.append("BATEAU-");
-        else if(carteTransport.estDouble()) nomCarte.append("DOUBLE-");
+        if(carteTransport.estDouble()) nomCarte.append("DOUBLE-");
+        else if(carteTransport.estBateau()) nomCarte.append("BATEAU-");
         else if(carteTransport.estJoker()) nomCarte.append("JOKER-");
         else if(carteTransport.estWagon()) nomCarte.append("WAGON-");
 

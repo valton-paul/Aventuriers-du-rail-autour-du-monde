@@ -139,7 +139,20 @@ public class VueJoueurCourant extends VBox {
                 }
                 else if (change.wasRemoved())
                 {
-
+                    for(ICarteTransport carte : change.getRemoved())
+                    {
+                        all :
+                       for(Node node : cartesTransport.getChildren())
+                       {
+                           HBox hbox = (HBox) node;
+                           for(Node node1 : hbox.getChildren())
+                           {
+                               VueCarteTransport vue = (VueCarteTransport) node1;
+                               if(vue.getCarteTransport().equals(carte)) hbox.getChildren().remove(node);
+                               break all;
+                           }
+                       }
+                    }
                 }
             }
         });
@@ -153,7 +166,6 @@ public class VueJoueurCourant extends VBox {
             case VERT -> color = "GREEN";
             case JAUNE -> color = "DARKGOLDENROD";
             case ROUGE -> color = "RED";
-            case ARGENT -> color = "SILVER";
         }
         return color;
     }
