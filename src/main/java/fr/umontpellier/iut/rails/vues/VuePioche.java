@@ -164,7 +164,7 @@ public class VuePioche extends VBox {
                 change.next();
                 if (change.wasAdded()) {
                     for (ICarteTransport cartes : change.getAddedSubList()) {
-                        VueCarteTransport vueTransport = new VueCarteTransport(cartes, 1);
+                        VueCarteTransport vueTransport = new VueCarteTransport(cartes, 1, false);
                         vueTransport.createBinding();
                         if (premiereLigne.getChildren().size() < deuxiemeLigne.getChildren().size()) {
                             premiereLigne.getChildren().add(vueTransport);

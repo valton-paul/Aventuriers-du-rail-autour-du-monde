@@ -37,7 +37,7 @@ public class VueDuJeu extends BorderPane {
         this.jeu = jeu;
         menusDuBas = new HBox();
         plateau = new VuePlateau();
-        autresJoueurs = new VueAutresJoueurs(jeu);
+        autresJoueurs = new VueAutresJoueurs();
         initialisation = new VueDemarragePartie();
         pioches = new VuePioche(jeu);
         choixEtInstruction = new VBox(); //Pour des boutons pions et les instructions
@@ -58,7 +58,7 @@ public class VueDuJeu extends BorderPane {
         plateau.prefHeightProperty().bind(getScene().heightProperty());
         plateau.creerBindings();
         initialisation.createBindings();
-
+        autresJoueurs.createBindings();
 
         ((VueDuJeu) getScene().getRoot()).getJeu().jeuEnPreparationProperty().addListener(new ChangeListener<Boolean>() {
             @Override

@@ -33,20 +33,24 @@ import java.util.ArrayList;
 public class VueAutresJoueurs extends VBox {
     private ArrayList<IJoueur> listeJoueurOrdre;
 
-    public VueAutresJoueurs(IJeu jeu)
+    public VueAutresJoueurs()
     {
-        listeJoueurOrdre = new ArrayList<>(jeu.getJoueurs());
-        creationVBoxJoueurSaufCourant();
         this.setSpacing(20);
+    }
 
+    public void createBindings()
+    {
+        listeJoueurOrdre = new ArrayList<>(((VueDuJeu) getScene().getRoot()).getJeu().getJoueurs());
+        creationVBoxJoueurSaufCourant();
         ChangeListener<IJoueur> joueurCourant = new ChangeListener<IJoueur>() {
+
             @Override
             public void changed(ObservableValue<? extends IJoueur> observableValue, IJoueur iJoueur, IJoueur t1) {
                 getChildren().clear();
                 listeJoueurOrdre.remove(t1);
                 creationVBoxJoueurSaufCourant();
                 listeJoueurOrdre.add(t1);
-                VueJoueurCourant vjc = new VueJoueurCourant(jeu);
+                VueJoueurCourant vjc = new VueJoueurCourant(((VueDuJeu) getScene().getRoot()).getJeu());
                 Color backgroundColor = Color.web(getCouleur(t1));
                 Color colorWithOpacity = new Color(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue(), 0.5);
                 BackgroundFill backgroundFill = new BackgroundFill(colorWithOpacity, null, null);
@@ -55,7 +59,7 @@ public class VueAutresJoueurs extends VBox {
                 getChildren().add(0, vjc);
             }
         };
-        jeu.joueurCourantProperty().addListener(joueurCourant);
+        ((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().addListener(joueurCourant);
     }
 
     public void creationVBoxJoueurSaufCourant()

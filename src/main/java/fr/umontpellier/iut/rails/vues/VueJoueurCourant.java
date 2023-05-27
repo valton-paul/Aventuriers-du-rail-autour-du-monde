@@ -5,12 +5,17 @@ import fr.umontpellier.iut.rails.IDestination;
 import fr.umontpellier.iut.rails.IJeu;
 import fr.umontpellier.iut.rails.IJoueur;
 import fr.umontpellier.iut.rails.mecanique.data.Ville;
+import javafx.collections.ListChangeListener;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+
+import java.util.ArrayList;
 
 /**
  * Cette classe présente les éléments appartenant au joueur courant.
@@ -18,11 +23,12 @@ import javafx.scene.text.Font;
  * On y définit les bindings sur le joueur courant, ainsi que le listener à exécuter lorsque ce joueur change
  */
 public class VueJoueurCourant extends VBox {
-
+    private VBox cartesTransport;
     public VueJoueurCourant(IJeu jeu) {
 
         VBox principal = new VBox();
         HBox profil = new HBox();
+        cartesTransport = new VBox();
         principal.getChildren().add(profil);
         this.getChildren().add(principal);
         Label label = new Label(jeu.joueurCourantProperty().get().getNom() + " | " + jeu.joueurCourantProperty().get().getScore() + " points");
@@ -44,14 +50,29 @@ public class VueJoueurCourant extends VBox {
         VBox destinations = new VBox();
         int compteur = 0;
         for (IDestination d : jeu.joueurCourantProperty().get().getDestinations()){
-            String villesDest = "D" + compteur;
+            StringBuilder villesDest = new StringBuilder("-> ");
             for(String v : d.getVilles()){
-                villesDest += v + " - ";
+                villesDest.append(v).append(" - ");
             }
-            Label uneDestination = new Label(villesDest);
+            villesDest.replace(villesDest.length()-3, villesDest.length()-1, ""); //Permet d'enlever le dernier tiret
+            Label uneDestination = new Label(villesDest.toString());
+            uneDestination.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    uneDestination.setStyle("-fx-font-weight: bold");
+                }
+            });
+
+            uneDestination.setOnMouseExited(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    uneDestination.setStyle("-fx-font-weight: normal");
+                }
+            });
             destinations.getChildren().add(uneDestination);
             compteur++;
         }
+        principal.getChildren().add(cartesTransport);
         principal.getChildren().add(destinations);
 
         // on affiche les cartes Wagons
@@ -63,6 +84,61 @@ public class VueJoueurCourant extends VBox {
             }
         }
 
+        VBox vbox = new VBox();
+        vbox.setSpacing(10);
+
+        for (ICarteTransport carte : jeu.joueurCourantProperty().get().cartesTransportProperty()) {
+            VueCarteTransport vue = new VueCarteTransport(carte, 1, true);
+            vue.createBinding();
+            vbox.getChildren().add(vue);
+
+            // Vérifier si le nombre de cartes atteint 4
+            if (vbox.getChildren().size() % 4 == 0) {
+                HBox hbox = new HBox();
+                hbox.getChildren().addAll(vbox.getChildren());
+                cartesTransport.getChildren().add(hbox);
+                vbox.getChildren().clear();
+            }
+        }
+
+        // Ajouter les cartes restantes
+        if (!vbox.getChildren().isEmpty()) {
+            HBox hbox = new HBox();
+            hbox.getChildren().addAll(vbox.getChildren());
+            cartesTransport.getChildren().add(hbox);
+        }
+
+        jeu.joueurCourantProperty().get().cartesTransportProperty().addListener(new ListChangeListener<ICarteTransport>() {
+            @Override
+            public void onChanged(Change<? extends ICarteTransport> change) {
+                change.next();
+                if (change.wasAdded()) {
+                    VBox vbox = new VBox();
+                    vbox.setSpacing(10);
+
+                    for (ICarteTransport carte : change.getAddedSubList()) {
+                        VueCarteTransport vue = new VueCarteTransport(carte, 1, true);
+                        vue.createBinding();
+                        vbox.getChildren().add(vue);
+
+                        // Vérifier si le nombre de cartes atteint 4
+                        if (vbox.getChildren().size() % 4 == 0) {
+                            HBox hbox = new HBox();
+                            hbox.getChildren().addAll(vbox.getChildren());
+                            cartesTransport.getChildren().add(hbox);
+                            vbox.getChildren().clear();
+                        }
+                    }
+
+                    // Ajouter les cartes restantes
+                    if (!vbox.getChildren().isEmpty()) {
+                        HBox hbox = new HBox();
+                        hbox.getChildren().addAll(vbox.getChildren());
+                        cartesTransport.getChildren().add(hbox);
+                    }
+                }
+            }
+        });
     }
 
     public String getCouleur(IJoueur j) {

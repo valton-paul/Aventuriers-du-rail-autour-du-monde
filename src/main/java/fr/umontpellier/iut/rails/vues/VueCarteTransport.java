@@ -18,7 +18,7 @@ public class VueCarteTransport extends Button {
 
     private final ICarteTransport carteTransport;
 
-    public VueCarteTransport(ICarteTransport carteTransport, int nbCartes) {
+    public VueCarteTransport(ICarteTransport carteTransport, int nbCartes, boolean main) {
         this.carteTransport = carteTransport;
 
         StringBuilder nomCarte = new StringBuilder().append("carte-");
@@ -34,7 +34,8 @@ public class VueCarteTransport extends Button {
 
 
         ImageView img = new ImageView(new Image("images/cartesWagons/" + nomCarte));
-        img.setFitHeight(100);
+        if(main)img.setFitHeight(50);
+        else img.setFitHeight(100);
         img.setPreserveRatio(true);
         this.setGraphic(img);
     }
