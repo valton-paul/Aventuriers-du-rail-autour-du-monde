@@ -17,9 +17,11 @@ import javafx.scene.layout.Pane;
 public class VueCarteTransport extends Button {
 
     private final ICarteTransport carteTransport;
+    private boolean estDansLaMain;
 
     public VueCarteTransport(ICarteTransport carteTransport, int nbCartes, boolean main) {
         this.carteTransport = carteTransport;
+        estDansLaMain = main;
 
         StringBuilder nomCarte = new StringBuilder().append("carte-");
         if(carteTransport.estBateau()) nomCarte.append("BATEAU-");
@@ -45,16 +47,14 @@ public class VueCarteTransport extends Button {
         this.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                ((VueDuJeu) getScene().getRoot()).getJeu().uneCarteTransportAEteChoisie(carteTransport);
+                if(estDansLaMain) ((VueDuJeu) getScene().getRoot()).getJeu().uneCarteDuJoueurEstJouee(carteTransport);
+                else ((VueDuJeu) getScene().getRoot()).getJeu().uneCarteTransportAEteChoisie(carteTransport);
             }
         });
     }
 
-
-
     public ICarteTransport getCarteTransport() {
         return carteTransport;
     }
-
 
 }

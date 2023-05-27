@@ -41,6 +41,7 @@ public class VuePlateau extends Pane {
 
     EventHandler<MouseEvent> choixRoute = event -> {
         System.out.println("On a cliqué sur une route");
+//        ((VueDuJeu) getScene().getRoot()).getJeu().uneRouteAEteChoisie(event.toString());
     };
 
     EventHandler<MouseEvent> choixPort = event -> {
@@ -61,7 +62,12 @@ public class VuePlateau extends Pane {
             cerclePort.setOpacity(0);
             getChildren().add(cerclePort);
             bindCerclePortAuPlateau(positionPortSurPlateau, cerclePort);
-            cerclePort.setOnMouseClicked(choixPort);
+            cerclePort.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    ((VueDuJeu) getScene().getRoot()).getJeu().unPortAEteChoisi(nomPort);
+                }
+            });
         }
     }
 
@@ -76,8 +82,13 @@ public class VuePlateau extends Pane {
                 rectangleSegment.setRotate(unSegment.getAngle());
                 rectangleSegment.setOpacity(0);
                 getChildren().add(rectangleSegment);
-                rectangleSegment.setOnMouseClicked(choixRoute);
                 bindRectangle(rectangleSegment, unSegment.getXHautGauche(), unSegment.getYHautGauche());
+                rectangleSegment.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent mouseEvent) {
+                        ((VueDuJeu) getScene().getRoot()).getJeu().uneRouteAEteChoisie(nomRoute);
+                    }
+                });
             }
         }
     }
