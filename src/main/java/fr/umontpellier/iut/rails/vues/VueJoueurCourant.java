@@ -8,6 +8,7 @@ import fr.umontpellier.iut.rails.mecanique.data.Ville;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -84,9 +85,9 @@ public class VueJoueurCourant extends VBox {
             }
         }
 
+
         VBox vbox = new VBox();
         vbox.setSpacing(10);
-
         for (ICarteTransport carte : jeu.joueurCourantProperty().get().cartesTransportProperty()) {
             VueCarteTransport vue = new VueCarteTransport(carte, 1, true);
             vue.createBinding();
@@ -113,29 +114,32 @@ public class VueJoueurCourant extends VBox {
             public void onChanged(Change<? extends ICarteTransport> change) {
                 change.next();
                 if (change.wasAdded()) {
-                    VBox vbox = new VBox();
-                    vbox.setSpacing(10);
-
-                    for (ICarteTransport carte : change.getAddedSubList()) {
+                    for(ICarteTransport carte : change.getAddedSubList())
+                    {
                         VueCarteTransport vue = new VueCarteTransport(carte, 1, true);
                         vue.createBinding();
-                        vbox.getChildren().add(vue);
-
-                        // Vérifier si le nombre de cartes atteint 4
-                        if (vbox.getChildren().size() % 4 == 0) {
-                            HBox hbox = new HBox();
-                            hbox.getChildren().addAll(vbox.getChildren());
-                            cartesTransport.getChildren().add(hbox);
-                            vbox.getChildren().clear();
+                        boolean ajouter = false;
+                        for(Node node : cartesTransport.getChildren())
+                        {
+                            HBox lesCartes = (HBox) node;
+                            if(lesCartes.getChildren().size() < 4)
+                            {
+                                lesCartes.getChildren().add(vue);
+                                ajouter = true;
+                                break;
+                            }
+                        }
+                        if (!ajouter)
+                        {
+                            HBox lesCartes = new HBox();
+                            lesCartes.getChildren().add(vue);
+                            cartesTransport.getChildren().add(lesCartes);
                         }
                     }
+                }
+                else if (change.wasRemoved())
+                {
 
-                    // Ajouter les cartes restantes
-                    if (!vbox.getChildren().isEmpty()) {
-                        HBox hbox = new HBox();
-                        hbox.getChildren().addAll(vbox.getChildren());
-                        cartesTransport.getChildren().add(hbox);
-                    }
                 }
             }
         });
