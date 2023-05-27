@@ -1,8 +1,10 @@
 package fr.umontpellier.iut.rails.vues;
 
 import fr.umontpellier.iut.rails.IJeu;
+import fr.umontpellier.iut.rails.mecanique.data.CarteTransport;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -67,6 +69,13 @@ public class VueDuJeu extends BorderPane {
                 menusDuBas.getChildren().add(pioches);
                 pioches.createBindings();
                 menusDuBas.setAlignment(Pos.CENTER_LEFT);
+
+                ((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().get().cartesTransportPoseesProperty().addListener(new ListChangeListener<CarteTransport>() {
+                    @Override
+                    public void onChanged(Change<? extends CarteTransport> change) {
+
+                    }
+                });
             }
         });
     }

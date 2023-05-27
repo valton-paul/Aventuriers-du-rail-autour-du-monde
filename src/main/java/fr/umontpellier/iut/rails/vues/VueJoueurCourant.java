@@ -24,7 +24,7 @@ import java.util.ArrayList;
  * On y définit les bindings sur le joueur courant, ainsi que le listener à exécuter lorsque ce joueur change
  */
 public class VueJoueurCourant extends VBox {
-    private VBox cartesTransport;
+    private final VBox cartesTransport;
     public VueJoueurCourant(IJeu jeu) {
 
         VBox principal = new VBox();
