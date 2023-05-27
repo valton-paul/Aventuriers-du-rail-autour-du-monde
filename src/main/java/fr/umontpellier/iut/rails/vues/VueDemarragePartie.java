@@ -103,7 +103,6 @@ public class VueDemarragePartie extends HBox {
             @Override
             public void handle(ActionEvent actionEvent) {
                 ((VueDuJeu) getScene().getRoot()).getJeu().leNombreDePionsSouhaiteAEteRenseigne(zoneDeTexte.getText());
-                getChildren().remove(ecrire);
                 if(!getChildren().contains(choixDesDestinations)) getChildren().add(choixDesDestinations);
             }
         };

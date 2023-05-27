@@ -3,6 +3,7 @@ package fr.umontpellier.iut.rails.vues;
 import fr.umontpellier.iut.rails.ICarteTransport;
 import fr.umontpellier.iut.rails.IDestination;
 import fr.umontpellier.iut.rails.IJeu;
+import fr.umontpellier.iut.rails.IJoueur;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
@@ -127,8 +128,9 @@ public class VuePioche extends VBox {
             @Override
             public void handle(ActionEvent actionEvent) {
                 if (!saisiePions.getText().isEmpty()) {
+                    IJoueur avantEchange = ((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().get();
                     ((VueDuJeu) getScene().getRoot()).getJeu().leNombreDePionsSouhaiteAEteRenseigne(saisiePions.getText());
-                    getChildren().remove(1); // faudra vérifier que on ai rentré un nb de pions valide
+                    if(!((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().get().equals(avantEchange)) getChildren().remove(1);
                 }
             }
         });
