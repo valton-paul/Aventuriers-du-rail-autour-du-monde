@@ -74,13 +74,24 @@ public class VuePlateau extends Pane {
                     change.next();
                     if(change.wasRemoved()) {
                         HashMap<Node, Shape> aChanger = new HashMap<>();
+                        ArrayList<ImageView> ajout = new ArrayList<>();
                         for (Node node : getChildren()) {
                             if (node instanceof Rectangle rect) {
                                 if (rect.getId().equals(dernierNodeAppuyer.getId())) {
                                     rect.setOpacity(1);
                                     rect.setFill(Color.web(VueAutresJoueurs.getCouleur(j)));
-                                    Image img = new Image("images/wagons/image-wagon-" + ((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().get().getCouleur().toString().toUpperCase() + ".png");
-                                    aChanger.put(new ImageView(img), rect);
+//                                    Image img = new Image("images/wagons/image-wagon-" + ((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().get().getCouleur().toString().toUpperCase() + ".png");
+//                                    //aChanger.put(new ImageView(img), rect);
+//                                    for(DonneesGraphiques.DonneesSegments position : DonneesGraphiques.routes.get(rect.getId()))
+//                                    {
+//                                        ImageView jetons = new ImageView(img);
+//                                        ajout.add(jetons);
+//                                        jetons.setFitWidth(46);
+//                                        jetons.setFitHeight(14);
+//                                        jetons.setX(position.getXHautGauche());
+//                                        jetons.setY(position.getYHautGauche());
+//                                        jetons.setRotate(position.getAngle());
+//                                    }
                                 }
                             } else if (node instanceof Circle circle) {
                                 if (circle.getId().equals(dernierNodeAppuyer.getId()))
@@ -90,6 +101,7 @@ public class VuePlateau extends Pane {
                                 }
                             }
                         }
+//                        getChildren().addAll(ajout);
 //                        for (HashMap.Entry<Node, Shape> entry : aChanger.entrySet()) {
 //                            entry.getKey().setLayoutX(entry.getValue().getBoundsInLocal().getCenterX());
 //                            entry.getKey().setLayoutX(entry.getValue().getBoundsInLocal().getCenterY());
