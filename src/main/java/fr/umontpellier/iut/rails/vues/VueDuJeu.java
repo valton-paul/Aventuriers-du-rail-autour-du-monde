@@ -53,7 +53,6 @@ public class VueDuJeu extends BorderPane {
         menusDuBas.setPadding(new Insets(10));
         menusDuBas.setAlignment(Pos.TOP_LEFT);
         menusDuBas.getChildren().add(initialisation);
-
     }
 
     public void creerBindings() {
