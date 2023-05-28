@@ -10,7 +10,9 @@ import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -22,7 +24,9 @@ import javafx.stage.Screen;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Cette classe présente les routes et les villes sur le plateau.
@@ -69,11 +73,14 @@ public class VuePlateau extends Pane {
                 public void onChanged(Change<? extends CarteTransport> change) {
                     change.next();
                     if(change.wasRemoved()) {
+                        HashMap<Node, Shape> aChanger = new HashMap<>();
                         for (Node node : getChildren()) {
                             if (node instanceof Rectangle rect) {
                                 if (rect.getId().equals(dernierNodeAppuyer.getId())) {
                                     rect.setOpacity(1);
                                     rect.setFill(Color.web(VueAutresJoueurs.getCouleur(j)));
+                                    Image img = new Image("images/wagons/image-wagon-" + ((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().get().getCouleur().toString().toUpperCase() + ".png");
+                                    aChanger.put(new ImageView(img), rect);
                                 }
                             } else if (node instanceof Circle circle) {
                                 if (circle.getId().equals(dernierNodeAppuyer.getId()))
@@ -83,6 +90,11 @@ public class VuePlateau extends Pane {
                                 }
                             }
                         }
+//                        for (HashMap.Entry<Node, Shape> entry : aChanger.entrySet()) {
+//                            entry.getKey().setLayoutX(entry.getValue().getBoundsInLocal().getCenterX());
+//                            entry.getKey().setLayoutX(entry.getValue().getBoundsInLocal().getCenterY());
+//                            getChildren().add(getChildren().indexOf(entry.getValue()),entry.getKey());
+//                        }
                     }
                 }
             });
