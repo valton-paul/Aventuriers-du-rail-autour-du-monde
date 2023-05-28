@@ -64,7 +64,11 @@ public class VueChoixJoueurs extends Stage {
         bouton = new StackPane();
 
         gandefentre.setCenter(container);
-        Button lancer = new Button("Lancer la partie !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        Button lancer = new Button();
+        ImageView start = new ImageView(new Image("images/startButton.png"));
+        start.setFitHeight(75);
+        start.setFitHeight(175);
+        lancer.setGraphic(start);
         lancer.setPadding(new Insets(5));
         VBox bas = new VBox(lancer);
         bas.setAlignment(Pos.CENTER);
