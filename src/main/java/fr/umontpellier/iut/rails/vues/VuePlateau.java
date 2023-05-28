@@ -10,9 +10,11 @@ import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
@@ -91,6 +93,28 @@ public class VuePlateau extends Pane {
                     @Override
                     public void handle(MouseEvent mouseEvent) {
                         ((VueDuJeu) getScene().getRoot()).getJeu().uneRouteAEteChoisie(nomRoute);
+                        ((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().get().cartesTransportPoseesProperty().addListener(new ListChangeListener<CarteTransport>() {
+                            @Override
+                            public void onChanged(Change<? extends CarteTransport> change) {
+                                change.next();
+                                if(change.wasRemoved())
+                                {
+                                    for(Node node : getChildren())
+                                    {
+                                        if(node instanceof Rectangle)
+                                        {
+                                            Rectangle rect = (Rectangle) node;
+                                            if(rect.getId().equals(rectangleSegment.getId()))
+                                            {
+                                                rect.setOpacity(1);
+                                                rect.setFill(Color.web(VueAutresJoueurs.getCouleur(((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().get())));
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        });
                     }
                 });
             }
