@@ -95,7 +95,7 @@ public class VueChoixJoueurs extends Stage {
         lancer.setOnMouseExited(event -> this.getScene().setCursor(Cursor.DEFAULT));
 
 
-        gandefentre.setCenter(container);
+        gandefentre.setCenter(container) ;
         VBox bas = new VBox(lancer);
         bas.setAlignment(Pos.CENTER);
         bas.setPadding(new Insets(30));
