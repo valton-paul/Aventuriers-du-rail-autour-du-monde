@@ -1,5 +1,7 @@
 package fr.umontpellier.iut.rails.vues;
 
+import javafx.animation.ScaleTransition;
+import javafx.animation.TranslateTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -22,6 +24,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -87,9 +90,7 @@ public class VueChoixJoueurs extends Stage {
         lancer.setFont(Font.font("Arial", 30));
         lancer.setTextFill(Color.WHITE);
         lancer.setBackground(new Background(new BackgroundFill(Color.web("#2ecc71"), new CornerRadii(5), Insets.EMPTY)));
-        lancer.setOnMouseEntered(event -> lancer.setBackground(new Background(new BackgroundFill(Color.web("#27ae60"), new CornerRadii(5), Insets.EMPTY))));
-        lancer.setOnMouseExited(event -> lancer.setBackground(new Background(new BackgroundFill(Color.web("#2ecc71"), new CornerRadii(5), Insets.EMPTY))));
-        lancer.setPadding(new Insets(20));
+        lancer.setPadding(new Insets(20, 50, 20, 50));
         lancer.setOnMouseEntered(event -> this.getScene().setCursor(Cursor.HAND));
         lancer.setOnMouseExited(event -> this.getScene().setCursor(Cursor.DEFAULT));
 
@@ -170,6 +171,20 @@ public class VueChoixJoueurs extends Stage {
         unJoueur.setSpacing(50);
         unJoueur.setMaxWidth(this.getWidth() / 6);
 
+
+        // on créé l'ainmation pour les arrivée
+
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(0.5), unJoueur);
+        scaleTransition.setFromX(0);
+        scaleTransition.setToX(1);
+
+        TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(0.5), unJoueur);
+        translateTransition.setFromX(-unJoueur.getPrefWidth());
+        translateTransition.setToX(0);
+
+        scaleTransition.play();
+        translateTransition.play();
+
         unJoueur.setAlignment(Pos.CENTER);
         Random chiffre = new Random();
         int randomNumber = chiffre.nextInt(5);
@@ -198,8 +213,6 @@ public class VueChoixJoueurs extends Stage {
         enelever.setTextFill(Color.WHITE);
         enelever.setPrefWidth(200);
         enelever.setBackground(new Background(new BackgroundFill(Color.web("#e74c3c"), new CornerRadii(5), Insets.EMPTY)));
-        enelever.setOnMouseEntered(event -> enelever.setBackground(new Background(new BackgroundFill(Color.web("#c0392b"), new CornerRadii(5), Insets.EMPTY))));
-        enelever.setOnMouseExited(event -> enelever.setBackground(new Background(new BackgroundFill(Color.web("#e74c3c"), new CornerRadii(5), Insets.EMPTY))));
         enelever.setPadding(new Insets(20));
         enelever.setOnMouseEntered(event -> this.getScene().setCursor(Cursor.HAND));
         enelever.setOnMouseExited(event -> this.getScene().setCursor(Cursor.DEFAULT));
@@ -212,7 +225,14 @@ public class VueChoixJoueurs extends Stage {
             @Override
             public void handle(ActionEvent actionEvent) {
                 if (container.getChildren().size() > 3) {
-                    container.getChildren().remove(unJoueur);
+                    double durationSeconds = 0.5;
+                    ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(durationSeconds), unJoueur);
+                    scaleTransition.setToX(0);
+                    TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(durationSeconds), unJoueur);
+                    translateTransition.setToX(-unJoueur.getPrefWidth());
+                    translateTransition.setOnFinished(event -> container.getChildren().remove(unJoueur));
+                    scaleTransition.play();
+                    translateTransition.play();
                     imagesDejaPrises.remove((Object) finalRandomNumber);
                 }
                 if (!container.getChildren().contains(ajouter)) {
