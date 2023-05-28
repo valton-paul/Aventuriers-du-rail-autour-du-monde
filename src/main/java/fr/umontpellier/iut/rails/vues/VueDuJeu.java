@@ -2,6 +2,7 @@ package fr.umontpellier.iut.rails.vues;
 
 import fr.umontpellier.iut.rails.IJeu;
 import fr.umontpellier.iut.rails.mecanique.data.CarteTransport;
+import javafx.beans.InvalidationListener;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
@@ -69,6 +70,7 @@ public class VueDuJeu extends BorderPane {
                 menusDuBas.getChildren().add(pioches);
                 pioches.createBindings();
                 menusDuBas.setAlignment(Pos.CENTER_LEFT);
+                ((VueDuJeu) getScene().getRoot()).getJeu().destinationsInitialesProperty().removeListener(initialisation.dest);
 
                 ((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().get().cartesTransportPoseesProperty().addListener(new ListChangeListener<CarteTransport>() {
                     @Override
