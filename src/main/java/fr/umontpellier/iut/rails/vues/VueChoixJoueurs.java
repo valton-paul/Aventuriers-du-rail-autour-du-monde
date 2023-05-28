@@ -64,6 +64,14 @@ public class VueChoixJoueurs extends Stage {
         gandefentre = new BorderPane();
         tousRempli = true;
 
+
+        String imageUrl = "images/fond23.png"; // ou fond22 j'hésite choisi celui que tu veux
+        BackgroundSize backgroundSize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, true, true, true, true);
+        BackgroundImage backgroundImage = new BackgroundImage(new Image(imageUrl), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
+        Background background = new Background(backgroundImage);
+
+        gandefentre.setBackground(background);
+
         // on configure le bouton ajouter
         ajouter.setStyle("-fx-background-color: black; -fx-text-fill: white;-fx-font-size: 50px");
         ajouter.setPrefSize(100, 100);
@@ -149,6 +157,12 @@ public class VueChoixJoueurs extends Stage {
 
     public void creerJoueur() {
         VBox unJoueur = new VBox();
+        String imageUrl = "images/fond3.png";
+        BackgroundSize backgroundSize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, true, true, true, true);
+        BackgroundImage backgroundImage = new BackgroundImage(new Image(imageUrl), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
+        Background background = new Background(backgroundImage);
+
+        unJoueur.setBackground(background);
         BorderStrokeStyle borderStyle = BorderStrokeStyle.SOLID;
         BorderStroke borderStroke = new BorderStroke(Color.BLACK, borderStyle, null, new BorderWidths(0, 5, 0, 5));
         unJoueur.setBorder(new Border(borderStroke));
