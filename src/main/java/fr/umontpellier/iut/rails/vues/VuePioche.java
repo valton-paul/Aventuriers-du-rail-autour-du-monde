@@ -23,6 +23,7 @@ import javafx.scene.text.Font;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class VuePioche extends VBox {
     private HBox toutSafuInstruction;
