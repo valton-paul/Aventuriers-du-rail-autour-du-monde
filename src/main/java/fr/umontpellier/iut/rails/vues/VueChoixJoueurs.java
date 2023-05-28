@@ -142,6 +142,7 @@ public class VueChoixJoueurs extends Stage {
         Scene s = new Scene(gandefentre);
         this.setScene(s);
         this.setMaximized(true);
+        this.setResizable(false);
         this.show();
     }
 
