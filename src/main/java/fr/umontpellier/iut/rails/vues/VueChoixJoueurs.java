@@ -94,9 +94,9 @@ public class VueChoixJoueurs extends Stage {
 
 
         LinearGradient gradient = new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE,
-                new Stop(0, Color.web("#2ecc71")),
+                new Stop(0.25, Color.web("#2ecc71")),
                 new Stop(0.5, Color.web("#13701D")),
-                new Stop(1, Color.web("#2ecc71")));
+                new Stop(0.75, Color.web("#2ecc71")));
 
         // Appliquer le dégradé initial sur le bouton
         lancer.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
