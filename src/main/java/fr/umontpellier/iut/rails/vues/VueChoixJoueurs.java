@@ -46,6 +46,7 @@ public class VueChoixJoueurs extends Stage {
     private Button ajouter;
     private BorderPane gandefentre;
     private boolean tousRempli;
+    private StackPane bouton;
 
     public VueChoixJoueurs() {
         nomsJoueurs = FXCollections.observableArrayList();
@@ -57,11 +58,10 @@ public class VueChoixJoueurs extends Stage {
         visages.add(new ImageView(new Image("images/cartesWagons/avatar-JAUNE.png")));
         visages.add(new ImageView(new Image("images/cartesWagons/avatar-VERT.png")));
         imagesDejaPrises = new ArrayList<>();
-        ajouter = new Button("ajouter");
+        ajouter = new Button();
         gandefentre = new BorderPane();
         tousRempli = true;
-
-
+        bouton = new StackPane();
 
         gandefentre.setCenter(container);
         Button lancer = new Button("Lancer la partie !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -73,7 +73,10 @@ public class VueChoixJoueurs extends Stage {
         BorderStroke borderStroke = new BorderStroke(Color.BLACK, borderStyle, null, new BorderWidths(5, 0, 0, 0));
         bas.setBorder(new Border(borderStroke));
         gandefentre.setBottom(bas);
-
+        ImageView image = new ImageView(new Image("images/addButton.png"));
+        image.setFitHeight(115);
+        image.setFitWidth(125);
+        ajouter.setGraphic(image);
 
         ArrayList<String> noms = new ArrayList<>();
         lancer.setOnAction(new EventHandler<ActionEvent>() {
@@ -102,11 +105,6 @@ public class VueChoixJoueurs extends Stage {
             }
         });
 
-
-        container.getChildren().add(ajouter);
-        for (int i = 0; i < 2; i++) {
-            creerJoueur();
-        }
         ajouter.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -114,14 +112,24 @@ public class VueChoixJoueurs extends Stage {
                     creerJoueur();
                 }
                 if (imagesDejaPrises.size() == 5) {
-                    container.getChildren().remove(ajouter);
+                    container.getChildren().remove(bouton);
                 }
             }
         });
 
-        container.setAlignment(Pos.CENTER);
         Scene s = new Scene(gandefentre);
         this.setScene(s);
+
+        bouton.getChildren().add(ajouter);
+        bouton.setAlignment(Pos.CENTER);
+        bouton.setPadding(new Insets(0, 0, 0, 75));
+        container.getChildren().add(bouton);
+        for (int i = 0; i < 2; i++) {
+            creerJoueur();
+        }
+
+
+        container.setAlignment(Pos.CENTER);
         this.setMaximized(true);
         this.show();
     }
@@ -151,7 +159,11 @@ public class VueChoixJoueurs extends Stage {
         t.setAlignment(Pos.CENTER);
         unJoueur.getChildren().add(t);
 
-        Button enelever = new Button("Enlever");
+        Button enelever = new Button();
+        ImageView img = new ImageView(new Image("images/removeButton.png"));
+        img.setFitHeight(115);
+        img.setFitWidth(125);
+        enelever.setGraphic(img);
         unJoueur.getChildren().add(enelever);
 
         container.getChildren().add(container.getChildren().size() - 1, unJoueur);
@@ -163,8 +175,9 @@ public class VueChoixJoueurs extends Stage {
                     container.getChildren().remove(unJoueur);
                     imagesDejaPrises.remove((Object) finalRandomNumber);
                 }
-                if (!container.getChildren().contains(ajouter)) {
-                    container.getChildren().add(ajouter);
+                if (!container.getChildren().contains(bouton)) {
+                    container.getChildren().add(bouton);
+                    bouton.setPadding(new Insets(0, 0, 0, 75));
                 }
             }
         });
