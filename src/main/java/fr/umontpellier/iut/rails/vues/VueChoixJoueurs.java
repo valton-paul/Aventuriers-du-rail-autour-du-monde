@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -18,6 +19,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -57,15 +60,33 @@ public class VueChoixJoueurs extends Stage {
         visages.add(new ImageView(new Image("images/cartesWagons/avatar-JAUNE.png")));
         visages.add(new ImageView(new Image("images/cartesWagons/avatar-VERT.png")));
         imagesDejaPrises = new ArrayList<>();
-        ajouter = new Button("ajouter");
+        ajouter = new Button("+");
         gandefentre = new BorderPane();
         tousRempli = true;
 
+        // on configure le bouton ajouter
+        ajouter.setStyle("-fx-background-color: black; -fx-text-fill: white;-fx-font-size: 50px");
+        ajouter.setPrefSize(100, 100);
+        ajouter.setOnMouseEntered(event -> this.getScene().setCursor(Cursor.HAND));
+        ajouter.setOnMouseExited(event -> this.getScene().setCursor(Cursor.DEFAULT));
+
+        container.setMargin(ajouter, new Insets(50));
+
+
+        // on configure le bouton lancer la partie
+        Button lancer = new Button("> Lancer la partie <");
+        //lancer.setPrefHeight(75);
+        lancer.setFont(Font.font("Arial", 30));
+        lancer.setTextFill(Color.WHITE);
+        lancer.setBackground(new Background(new BackgroundFill(Color.web("#2ecc71"), new CornerRadii(5), Insets.EMPTY)));
+        lancer.setOnMouseEntered(event -> lancer.setBackground(new Background(new BackgroundFill(Color.web("#27ae60"), new CornerRadii(5), Insets.EMPTY))));
+        lancer.setOnMouseExited(event -> lancer.setBackground(new Background(new BackgroundFill(Color.web("#2ecc71"), new CornerRadii(5), Insets.EMPTY))));
+        lancer.setPadding(new Insets(20));
+        lancer.setOnMouseEntered(event -> this.getScene().setCursor(Cursor.HAND));
+        lancer.setOnMouseExited(event -> this.getScene().setCursor(Cursor.DEFAULT));
 
 
         gandefentre.setCenter(container);
-        Button lancer = new Button("Lancer la partie !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        lancer.setPadding(new Insets(5));
         VBox bas = new VBox(lancer);
         bas.setAlignment(Pos.CENTER);
         bas.setPadding(new Insets(30));
@@ -85,7 +106,7 @@ public class VueChoixJoueurs extends Stage {
                             if (element instanceof TextField) {
                                 if (!((TextField) element).getText().isEmpty()) {
                                     noms.add(((TextField) element).getText());
-                                }else{
+                                } else {
                                     tousRempli = false;
                                 }
                             }
@@ -93,7 +114,7 @@ public class VueChoixJoueurs extends Stage {
                         }
                     }
                 }
-                if(tousRempli){
+                if (tousRempli) {
                     nomsJoueurs.addAll(noms);
                     close();
                 }
@@ -144,12 +165,30 @@ public class VueChoixJoueurs extends Stage {
         unJoueur.getChildren().add(visages.get(randomNumber));
         imagesDejaPrises.add(randomNumber);
 
-        unJoueur.getChildren().add(new Label("Nom du joueur : "));
+        Label nom = new Label("Nom du joueur : ");
+
+
+        nom.setFont(Font.font("Arial", 20));
+        unJoueur.getChildren().add(nom);
+
+
         TextField t = new TextField();
+        t.setPromptText("entrez un nom");
+        t.setFont(Font.font("Arial", 25));
         t.setAlignment(Pos.CENTER);
         unJoueur.getChildren().add(t);
 
         Button enelever = new Button("Enlever");
+        enelever.setFont(Font.font("Arial", 20));
+        enelever.setTextFill(Color.WHITE);
+        enelever.setPrefWidth(200);
+        enelever.setBackground(new Background(new BackgroundFill(Color.web("#e74c3c"), new CornerRadii(5), Insets.EMPTY)));
+        enelever.setOnMouseEntered(event -> enelever.setBackground(new Background(new BackgroundFill(Color.web("#c0392b"), new CornerRadii(5), Insets.EMPTY))));
+        enelever.setOnMouseExited(event -> enelever.setBackground(new Background(new BackgroundFill(Color.web("#e74c3c"), new CornerRadii(5), Insets.EMPTY))));
+        enelever.setPadding(new Insets(20));
+        enelever.setOnMouseEntered(event -> this.getScene().setCursor(Cursor.HAND));
+        enelever.setOnMouseExited(event -> this.getScene().setCursor(Cursor.DEFAULT));
+
         unJoueur.getChildren().add(enelever);
 
         container.getChildren().add(container.getChildren().size() - 1, unJoueur);
