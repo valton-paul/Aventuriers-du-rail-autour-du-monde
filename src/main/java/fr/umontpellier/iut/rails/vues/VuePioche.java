@@ -36,6 +36,7 @@ public class VuePioche extends VBox {
     private Button piocheBateauButton;
     private TextField saisiePions;
     private Button piocheDest;
+    private HBox toutesLesDest;
 
 
     public VuePioche(IJeu jeu) {
@@ -137,13 +138,34 @@ public class VuePioche extends VBox {
             @Override
             public void handle(ActionEvent actionEvent) {
                 ((VueDuJeu) getScene().getRoot()).getJeu().nouvelleDestinationDemandee();
-                HBox toutesLesDest = new HBox();
+                toutesLesDest = new HBox();
                 for(IDestination n : ((VueDuJeu) getScene().getRoot()).getJeu().destinationsInitialesProperty()){
                     VueDestination vu = new VueDestination(n);
                     vu.createBindings();
                     toutesLesDest.getChildren().add(vu);
                 }
                 getChildren().add(1, toutesLesDest);
+                toutesLesDest.setSpacing(20);
+                toutesLesDest.setAlignment(Pos.CENTER);
+            }
+        });
+
+        ((VueDuJeu) getScene().getRoot()).getJeu().destinationsInitialesProperty().addListener(new ListChangeListener<IDestination>() {
+            @Override
+            public void onChanged(Change<? extends IDestination> change) {
+                change.next();
+                if(change.wasRemoved())
+                {
+                    ArrayList<Node> removedList = new ArrayList<>();
+                    for(IDestination dest : change.getRemoved()) {
+
+                        for (Node node : toutesLesDest.getChildren()) {
+                            VueDestination vu = (VueDestination) node;
+                            if(vu.getDestination().equals(dest)) removedList.add(node);
+                        }
+                    }
+                    toutesLesDest.getChildren().removeAll(removedList);
+                }
             }
         });
 
