@@ -37,6 +37,7 @@ public class VuePioche extends VBox {
     private TextField saisiePions;
     private Button piocheDest;
     private HBox toutesLesDest;
+    private Button passer;
 
 
     public VuePioche(IJeu jeu) {
@@ -54,6 +55,7 @@ public class VuePioche extends VBox {
         saisiePions.setMinHeight(50);
         saisiePions.setAlignment(Pos.CENTER);
         piocheDest = new Button();
+        passer = new Button("Passer");
 
         toutSafuInstruction = new HBox();
         toutSafuInstruction.setStyle("-fx-border-color: black; -fx-border-radius: 5px;");
@@ -129,10 +131,21 @@ public class VuePioche extends VBox {
         toutSafuInstruction.setSpacing(20);
         sixCartes.getChildren().addAll(premiereLigne, deuxiemeLigne);
         toutSafuInstruction.getChildren().add(sixCartes);
+        toutSafuInstruction.getChildren().add(passer);
+        passer.setMinHeight(50);
+        passer.setMinWidth(125);
+        passer.setFont(new Font("Arial", 30));
     }
 
 
     public void createBindings() {
+
+        passer.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                ((VueDuJeu) getScene().getRoot()).getJeu().passerAEteChoisi();
+            }
+        });
 
         piocheDest.setOnAction(new EventHandler<ActionEvent>() {
             @Override

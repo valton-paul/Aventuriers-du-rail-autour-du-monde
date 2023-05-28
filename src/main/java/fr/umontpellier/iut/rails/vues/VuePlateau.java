@@ -96,7 +96,6 @@ public class VuePlateau extends Pane {
 
                         // Si on appuis sur une route que l'on peut pas prendre le listener s'active et si on prends une autre route
                         // alors les deux routes seront avec les couleurs du joueurs
-
                         ((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().get().cartesTransportPoseesProperty().addListener(new ListChangeListener<CarteTransport>() {
                             @Override
                             public void onChanged(Change<? extends CarteTransport> change) {
