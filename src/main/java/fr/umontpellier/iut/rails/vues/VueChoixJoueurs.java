@@ -109,6 +109,7 @@ public class VueChoixJoueurs extends Stage {
         lancer.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                tousRempli = true;
                 for (Node n : container.getChildren()) {
                     if (n instanceof VBox box) {
                         for (Node element : box.getChildren()) {
