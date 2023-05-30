@@ -4,8 +4,14 @@ import fr.umontpellier.iut.rails.IDestination;
 import fr.umontpellier.iut.rails.mecanique.data.Ville;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.layout.Pane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 /**
  * Cette classe représente la vue d'une carte Destination.
@@ -14,9 +20,18 @@ import javafx.scene.layout.Pane;
  */
 public class VueDestination extends Button {
 
-    private final IDestination destination;
 
+    private final IDestination destination;
     public VueDestination(IDestination destination) {
+        this.setAlignment(Pos.CENTER);
+        this.setPadding(new Insets(10));
+
+
+        // Créer l'image avec le fond
+        Image foregroundImage =  new Image("images/dest.png");
+
+        Background g = new Background(new BackgroundImage(foregroundImage,null, null, null, null));
+        this.setBackground(g);
         this.destination = destination;
         StringBuilder nomDestination = new StringBuilder();
         for (String nomVille : destination.getVilles())
@@ -25,6 +40,10 @@ public class VueDestination extends Button {
         }
         nomDestination.append("\n Points : ").append(destination.getValeur());
         this.setText(nomDestination.toString());
+
+
+        //this.setBorder(new Border();
+
     }
 
     public void createBindings()
