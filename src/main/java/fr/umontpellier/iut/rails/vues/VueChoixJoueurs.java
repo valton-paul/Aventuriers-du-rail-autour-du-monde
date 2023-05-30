@@ -157,6 +157,7 @@ public class VueChoixJoueurs extends Stage {
                     close();
                 }else{
                     vibrate(VueChoixJoueurs.this);
+                    noms.clear();
                 }
             }
         });
