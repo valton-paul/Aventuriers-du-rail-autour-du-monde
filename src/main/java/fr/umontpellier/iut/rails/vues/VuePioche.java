@@ -25,7 +25,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class VuePioche extends VBox {
+public class VuePioche extends HBox {
     private HBox toutSafuInstruction;
     private VBox sixCartes;
     private HBox premiereLigne;
@@ -60,14 +60,15 @@ public class VuePioche extends VBox {
         passer = new Button("Passer");
 
         toutSafuInstruction = new HBox();
-        toutSafuInstruction.setStyle("-fx-border-color: black; -fx-border-radius: 5px;");
+        this.setStyle("-fx-border-color: black; -fx-border-radius: 5px;");
         toutSafuInstruction.setSpacing(10);
         premiereLigne.setSpacing(10);
         deuxiemeLigne.setSpacing(10);
 
 
-        this.getChildren().add(instructions);
         this.getChildren().add(toutSafuInstruction);
+        this.getChildren().add(instructions);
+
 
 
         // ajout des boutons pions
