@@ -1,6 +1,7 @@
 package fr.umontpellier.iut.rails.vues;
 
 import fr.umontpellier.iut.rails.IJeu;
+import fr.umontpellier.iut.rails.RailsIHM;
 import fr.umontpellier.iut.rails.mecanique.data.CarteTransport;
 import javafx.beans.InvalidationListener;
 import javafx.beans.value.ChangeListener;
@@ -35,6 +36,7 @@ public class VueDuJeu extends BorderPane {
     private VuePioche pioches;
     private HBox menusDuBas;
     private VBox choixEtInstruction;
+    private VueResultats fin;
 
     public VueDuJeu(IJeu jeu) {
         this.jeu = jeu;
@@ -61,6 +63,7 @@ public class VueDuJeu extends BorderPane {
         plateau.creerBindings();
         initialisation.createBindings();
         autresJoueurs.createBindings();
+
 
         ((VueDuJeu) getScene().getRoot()).getJeu().jeuEnPreparationProperty().addListener(new ChangeListener<Boolean>() {
             @Override

@@ -4,8 +4,11 @@ import fr.umontpellier.iut.rails.mecanique.Jeu;
 import fr.umontpellier.iut.rails.vues.DonneesGraphiques;
 import fr.umontpellier.iut.rails.vues.VueChoixJoueurs;
 import fr.umontpellier.iut.rails.vues.VueDuJeu;
+import fr.umontpellier.iut.rails.vues.VueResultats;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -22,12 +25,14 @@ public class RailsIHM extends Application {
     private VueChoixJoueurs vueChoixJoueurs;
     private Stage primaryStage;
     private Jeu jeu;
+    private VueResultats fin;
 
     private final boolean avecVueChoixJoueurs = true;
 
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
+        fin = new VueResultats(this);
         debuterJeu();
     }
 
@@ -69,6 +74,8 @@ public class RailsIHM extends Application {
             event.consume();
         });
         primaryStage.show();
+
+        finDePartie();
     }
 
     private final ListChangeListener<String> quandLesNomsJoueursSontDefinis = change -> {
@@ -84,6 +91,16 @@ public class RailsIHM extends Application {
         if (result.isPresent() && result.get() == ButtonType.OK) {
             Platform.exit();
         }
+    }
+
+    public void finDePartie(){
+        jeu.finDePartieProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+                primaryStage.setScene(new Scene(fin));
+                fin.creatBindings();
+            }
+        });
     }
 
     public Jeu getJeu() {

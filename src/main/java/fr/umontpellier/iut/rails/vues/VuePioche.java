@@ -39,6 +39,7 @@ public class VuePioche extends VBox {
     private Button piocheDest;
     private HBox toutesLesDest;
     private Button passer;
+    private Button allerALaFin;
 
 
     public VuePioche(IJeu jeu) {
@@ -136,10 +137,21 @@ public class VuePioche extends VBox {
         passer.setMinHeight(50);
         passer.setMinWidth(125);
         passer.setFont(new Font("Arial", 30));
+
+
+        allerALaFin = new Button("Finir");
+        toutSafuInstruction.getChildren().add(allerALaFin);
     }
 
 
     public void createBindings() {
+
+        allerALaFin.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                ((VueDuJeu) getScene().getRoot()).getJeu().finDePartieProperty().set(true);
+            }
+        });
 
         passer.setOnAction(new EventHandler<ActionEvent>() {
             @Override
