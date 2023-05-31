@@ -36,7 +36,6 @@ public class VueDuJeu extends BorderPane {
     private VuePioche pioches;
     private HBox menusDuBas;
     private VBox choixEtInstruction;
-    private VueResultats fin;
 
     public VueDuJeu(IJeu jeu) {
         this.jeu = jeu;

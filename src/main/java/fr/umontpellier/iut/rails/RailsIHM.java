@@ -98,6 +98,8 @@ public class RailsIHM extends Application {
             @Override
             public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
                 primaryStage.setScene(new Scene(fin));
+                primaryStage.setMaximized(true);
+                primaryStage.setResizable(false);
                 fin.creatBindings();
             }
         });

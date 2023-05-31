@@ -9,16 +9,11 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.stage.Stage;
-
 import java.security.cert.PolicyNode;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -47,16 +42,24 @@ public class VueResultats extends BorderPane {
         podium = new HBox();
         stats = new VBox();
 
+
         this.setBottom(bas);
         this.setCenter(podium);
         this.setRight(stats);
 
 
-        // on configure le bas
-        rejouer = new Button("Rejouer");
-        quitter = new Button("Quitter");
-        bas.getChildren().addAll(rejouer, quitter);
 
+        quitter = createJoliButton("Rejouer", Color.GREEN);
+        rejouer = createJoliButton("Quitter", Color.RED);
+        bas.getChildren().addAll(quitter, rejouer);
+
+        bas.setSpacing(300);
+        bas.setAlignment(Pos.CENTER);
+        bas.setPadding(new Insets(50));
+
+        BorderStroke borderStroke = new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderStroke.THIN);
+        Border border = new Border(borderStroke);
+        bas.setBorder(border);
 
         // on crééé le podium
 
@@ -89,8 +92,11 @@ public class VueResultats extends BorderPane {
 
 
         podium.getChildren().addAll(deuxieme, premier, troisieme);
+        podium.setAlignment(Pos.CENTER);
 
-        podium.setAlignment(Pos.BOTTOM_CENTER);
+
+
+
 
 
 
@@ -102,23 +108,71 @@ public class VueResultats extends BorderPane {
         // classement pour podium
         PriorityQueue<IJoueur> classement = classment();
 
-        Label premierNom = new Label(classement.poll().getNom());
+        ArrayList<IJoueur> tousLesjoueurs = new ArrayList<>();
+        while(!classement.isEmpty()){
+            tousLesjoueurs.add(classement.poll());
+        }
+
+        Label premierNom = new Label(tousLesjoueurs.get(0).getNom());
         premierNom.setFont(new Font("Arial", 30));
         premier.getChildren().add(0, premierNom);
         premierNom.setPadding(new Insets(0, 0, 20, 0));
 
-        Label deuxièmeNom = new Label(classement.poll().getNom());
+        Label deuxièmeNom = new Label(tousLesjoueurs.get(1).getNom());
         deuxièmeNom.setFont(new Font("Arial", 30));
         deuxièmeNom.setPadding(new Insets(0, 0, 20, 0));
         deuxieme.getChildren().add(0, deuxièmeNom);
 
-        if(classement.peek() != null){
-            Label troisiemeNom = new Label(classement.poll().getNom());
+        if(tousLesjoueurs.size()>2){
+            Label troisiemeNom = new Label(tousLesjoueurs.get(2).getNom());
             troisiemeNom.setFont(new Font("Arial", 30));
             troisiemeNom.setPadding(new Insets(0, 0, 20, 0));
             troisieme.getChildren().add(0, troisiemeNom);
 
         }
+
+
+        // création du classement
+        Label anonce = new Label("Classment");
+        anonce.setMinWidth(stats.computeAreaInScreen());
+        stats.getChildren().add(anonce);
+        anonce.setStyle("-fx-font-size: 50px; -fx-border-width: 5px; -fx-border-color: black");
+        stats.setStyle("-fx-border-width: 5px; -fx-border-color: black;");
+
+
+        int compteur = 1;
+        for(IJoueur joueurCourant : tousLesjoueurs){
+            HBox numeroEtJoeur = new HBox();
+            numeroEtJoeur.setMinHeight(stats.getHeight()/5);
+
+            Label numero = new Label(""+compteur);
+            numero.setStyle("-fx-font-size: 30px; -fx-border-width: 2px; -fx-border-color: black; -fx-padding: 10px");
+            numero.setMinHeight(numeroEtJoeur.getHeight());
+
+            VBox les2 = new VBox();
+            Label nom = new Label(joueurCourant.getNom() + " | " + joueurCourant.getScore());
+            nom.setStyle("-fx-font-size: 25px; -fx-padding: 15px");
+            les2.getChildren().add(nom);
+
+            Label port = new Label("Ports : " + joueurCourant.getNbPorts());
+            Label nbBateaux  = new Label("Pions Bateau : " + joueurCourant.getNbPionsBateau());
+            Label nbWagons = new Label("Pions Bateau : " + joueurCourant.getNbPionsWagon());
+
+
+            port.setStyle("-fx-font-size: 10px;  -fx-padding: 3px");
+            nbWagons.setStyle("-fx-font-size: 10px;  -fx-padding: 3px");
+            nbBateaux.setStyle("-fx-font-size: 10px;  -fx-padding: 3px");
+            les2.getChildren().addAll(port, nbWagons, nbBateaux);
+
+            numeroEtJoeur.getChildren().addAll(numero, les2);
+
+            stats.getChildren().add(numeroEtJoeur);
+
+            numeroEtJoeur.setStyle("-fx-border-width: 2px; -fx-border-color: black;");
+
+            compteur++;
+        }
+
 
     }
 
@@ -133,6 +187,15 @@ public class VueResultats extends BorderPane {
         });
         classement.addAll(ihm.getJeu().getJoueurs());
         return classement;
+    }
+
+    private Button createJoliButton(String text, Color backgroundColor) {
+        Button button = new Button(text);
+        button.setStyle("-fx-font-size: 40px; -fx-text-fill: white;");
+        button.setBackground(new Background(new BackgroundFill(backgroundColor, new CornerRadii(5), Insets.EMPTY)));
+        button.setPadding(new Insets(10, 20, 10, 20));
+
+        return button;
     }
 
 
