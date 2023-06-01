@@ -53,7 +53,8 @@ public class VueDemarragePartie extends HBox {
 
     public void createBindings() {
 
-        ((VueDuJeu) getScene().getRoot()).getJeu().instructionProperty().addListener(new ChangeListener<String>() {
+        ((VueDuJeu) getScene().getRoot()).getJeu()
+                .instructionProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 instruction.setText(t1);
@@ -92,7 +93,6 @@ public class VueDemarragePartie extends HBox {
                 }
             }
         };
-
         ((VueDuJeu) getScene().getRoot()).getJeu().destinationsInitialesProperty().addListener(dest);
 
         EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {

@@ -10,7 +10,10 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -23,7 +26,7 @@ import java.util.ArrayList;
  * <p>
  * On y définit les bindings sur le joueur courant, ainsi que le listener à exécuter lorsque ce joueur change
  */
-public class VueJoueurCourant extends VBox {
+public class VueJoueurCourant extends ScrollPane {
     private final VBox cartesTransport;
     public VueJoueurCourant(IJeu jeu) {
 
@@ -31,13 +34,20 @@ public class VueJoueurCourant extends VBox {
         HBox profil = new HBox();
         cartesTransport = new VBox();
         principal.getChildren().add(profil);
-        this.getChildren().add(principal);
+        this.setContent(principal);
         Label label = new Label(jeu.joueurCourantProperty().get().getNom() + " | " + jeu.joueurCourantProperty().get().getScore() + " points");
         label.setTextFill(Color.web(getCouleur(jeu.joueurCourantProperty().get())));
         label.setFont(new Font("Arial", 30));
         profil.getChildren().add(label);
-        this.setSpacing(20);
+        //this.setSpacing(20);
         this.setPadding(new Insets(0, 10, 0, 5));
+
+        Color backgroundColor = Color.web(getCouleur(jeu.joueurCourantProperty().get()));
+        Color colorWithOpacity = new Color(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue(), 0.5);
+        BackgroundFill backgroundFill = new BackgroundFill(colorWithOpacity, null, null);
+        Background background = new Background(backgroundFill);
+        principal.setBackground(background);
+
 
         // on affiche les pions du joueur (+ le nb de ports)
         VBox pions = new VBox();
@@ -49,7 +59,6 @@ public class VueJoueurCourant extends VBox {
 
         // on affiche les destinations
         VBox destinations = new VBox();
-        int compteur = 0;
         for (IDestination d : jeu.joueurCourantProperty().get().getDestinations()){
             StringBuilder villesDest = new StringBuilder("-> ");
             for(String v : d.getVilles()){
@@ -71,7 +80,6 @@ public class VueJoueurCourant extends VBox {
                 }
             });
             destinations.getChildren().add(uneDestination);
-            compteur++;
         }
         principal.getChildren().add(cartesTransport);
         principal.getChildren().add(destinations);

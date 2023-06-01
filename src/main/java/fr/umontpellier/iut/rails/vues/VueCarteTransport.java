@@ -34,7 +34,6 @@ public class VueCarteTransport extends Button {
         if(carteTransport.getAncre()) nomCarte.append("-A.png");
         else nomCarte.append(".png");
 
-
         ImageView img = new ImageView(new Image("images/cartesWagons/" + nomCarte));
         if(main)img.setFitHeight(50);
         else img.setFitHeight(100);
