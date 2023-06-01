@@ -9,6 +9,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
+import java.util.Objects;
+
 /**
  * Cette classe représente la vue d'une carte Transport.
  *
@@ -56,4 +58,16 @@ public class VueCarteTransport extends Button {
         return carteTransport;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        VueCarteTransport that = (VueCarteTransport) o;
+        return Objects.equals(carteTransport, that.carteTransport);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(carteTransport);
+    }
 }

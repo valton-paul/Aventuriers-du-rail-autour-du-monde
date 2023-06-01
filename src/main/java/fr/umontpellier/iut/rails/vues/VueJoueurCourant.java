@@ -84,9 +84,6 @@ public class VueJoueurCourant extends ScrollPane {
         principal.getChildren().add(cartesTransport);
         principal.getChildren().add(destinations);
 
-        // on affiche les cartes Wagons
-        HBox wagons = new HBox();
-        HBox bateaux = new HBox();
         for(ICarteTransport carte : jeu.joueurCourantProperty().get().getCartesTransport()){
             if(carte.estBateau()){
                 continue;
@@ -147,6 +144,7 @@ public class VueJoueurCourant extends ScrollPane {
                 }
                 else if (change.wasRemoved())
                 {
+                    System.out.println("remove");
                     for(ICarteTransport carte : change.getRemoved())
                     {
                         all :
@@ -156,7 +154,8 @@ public class VueJoueurCourant extends ScrollPane {
                            for(Node node1 : hbox.getChildren())
                            {
                                VueCarteTransport vue = (VueCarteTransport) node1;
-                               if(vue.getCarteTransport().equals(carte)) hbox.getChildren().remove(node);
+                               System.out.println("oui");
+                                if(carte.equals(vue.getCarteTransport())) hbox.getChildren().remove(vue);
                                break all;
                            }
                        }
