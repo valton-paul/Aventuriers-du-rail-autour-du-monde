@@ -36,7 +36,7 @@ public class VueCarteTransport extends Button {
 
         ImageView img = new ImageView(new Image("images/cartesWagons/" + nomCarte));
         if(main)img.setFitHeight(50);
-        else img.setFitHeight(100);
+        else img.setFitHeight(75);
         img.setPreserveRatio(true);
         this.setGraphic(img);
     }

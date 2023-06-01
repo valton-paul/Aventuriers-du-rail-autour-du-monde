@@ -87,6 +87,10 @@ public class VueDuJeu extends BorderPane {
         return jeu;
     }
 
+    public VuePlateau getPlateau() {
+        return plateau;
+    }
+
     EventHandler<? super MouseEvent> actionPasserParDefaut = (mouseEvent -> getJeu().passerAEteChoisi());
 
 }

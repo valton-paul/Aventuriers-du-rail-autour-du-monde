@@ -11,14 +11,17 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import java.io.File;
@@ -37,9 +40,12 @@ public class VuePioche extends HBox {
     private Button piocheBateauButton;
     private TextField saisiePions;
     private Button piocheDest;
-    private HBox toutesLesDest;
+    private VBox toutesLesDest;
     private Button passer;
     private Button allerALaFin;
+    private ScrollPane scrollDest;
+
+    private VBox instructionetPions;
 
 
     public VuePioche(IJeu jeu) {
@@ -58,17 +64,19 @@ public class VuePioche extends HBox {
         saisiePions.setAlignment(Pos.CENTER);
         piocheDest = new Button();
         passer = new Button("Passer");
-
+        instructionetPions = new VBox();
+        instructionetPions.setAlignment(Pos.CENTER);
+        scrollDest = new ScrollPane();
         toutSafuInstruction = new HBox();
-        this.setStyle("-fx-border-color: black; -fx-border-radius: 5px;");
+        this.setStyle("-fx-border-width: 3px 0 0 0; -fx-border-color: black;");
         toutSafuInstruction.setSpacing(10);
         premiereLigne.setSpacing(10);
         deuxiemeLigne.setSpacing(10);
 
 
         this.getChildren().add(toutSafuInstruction);
-        this.getChildren().add(instructions);
-
+        this.getChildren().add(instructionetPions);
+        instructionetPions.getChildren().add(instructions);
 
 
         // ajout des boutons pions
@@ -79,9 +87,9 @@ public class VuePioche extends HBox {
         Image wagon = new Image("images/bouton-pions-wagon.png");
         ImageView pionsbateau = new ImageView(bateau);
         ImageView pionswagon = new ImageView(wagon);
-        pionsbateau.setFitHeight(75);
+        pionsbateau.setFitHeight(65);
         pionsbateau.setPreserveRatio(true);
-        pionswagon.setFitHeight(75);
+        pionswagon.setFitHeight(65);
         pionswagon.setPreserveRatio(true);
 
         pionsWagon.setGraphic(pionswagon);
@@ -102,12 +110,11 @@ public class VuePioche extends HBox {
         toutSafuInstruction.getChildren().add(piocheDest);
 
 
-
         // on ajoute les pioches
         if (!jeu.piocheWagonVideProperty().getValue()) {
             Image wagoncarte = new Image("images/cartesWagons/dos-WAGON.png");
             ImageView piocheWagon = new ImageView(wagoncarte);
-            piocheWagon.setFitHeight(175);
+            piocheWagon.setFitHeight(150);
             piocheWagon.setPreserveRatio(true);
             piocheWagonButton.setGraphic(piocheWagon);
             toutSafuInstruction.getChildren().add(piocheWagonButton);
@@ -117,7 +124,7 @@ public class VuePioche extends HBox {
         if (!jeu.piocheBateauVideProperty().getValue()) {
             Image bateaucarte = new Image("images/cartesWagons/dos-BATEAU.png");
             ImageView piocheBateau = new ImageView(bateaucarte);
-            piocheBateau.setFitHeight(175);
+            piocheBateau.setFitHeight(150);
             piocheBateau.setPreserveRatio(true);
             piocheBateauButton.setGraphic(piocheBateau);
             toutSafuInstruction.getChildren().add(piocheBateauButton);
@@ -129,23 +136,30 @@ public class VuePioche extends HBox {
 
         toutSafuInstruction.setAlignment(Pos.CENTER);
         this.setAlignment(Pos.CENTER);
-        this.setSpacing(20);
 
-        toutSafuInstruction.setSpacing(20);
+        toutSafuInstruction.setSpacing(35);
         sixCartes.getChildren().addAll(premiereLigne, deuxiemeLigne);
         toutSafuInstruction.getChildren().add(sixCartes);
         toutSafuInstruction.getChildren().add(passer);
-        passer.setMinHeight(50);
-        passer.setMinWidth(125);
+        passer.setStyle("-fx-padding: 25px 40px; -fx-background-color: #3636b8;");
         passer.setFont(new Font("Arial", 30));
+        passer.setTextFill(Color.WHITE);
+        passer.setOnMouseEntered(event -> this.getScene().setCursor(Cursor.HAND));
+        passer.setOnMouseExited(event -> this.getScene().setCursor(Cursor.DEFAULT));
+
 
 
         allerALaFin = new Button("Finir");
-        toutSafuInstruction.getChildren().add(allerALaFin);
+        //toutSafuInstruction.getChildren().add(allerALaFin);
     }
 
 
     public void createBindings() {
+        instructionetPions.setStyle("-fx-border-color: black; -fx-border-width: 0 0 0 3px;");
+        instructionetPions.setMaxWidth(getScene().getWidth() - ((VueDuJeu) getScene().getRoot()).getPlateau().getWidth());
+        toutSafuInstruction.setMinWidth(((VueDuJeu) getScene().getRoot()).getPlateau().getWidth());
+
+
 
         allerALaFin.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -165,15 +179,20 @@ public class VuePioche extends HBox {
             @Override
             public void handle(ActionEvent actionEvent) {
                 ((VueDuJeu) getScene().getRoot()).getJeu().nouvelleDestinationDemandee();
-                toutesLesDest = new HBox();
-                for(IDestination n : ((VueDuJeu) getScene().getRoot()).getJeu().destinationsInitialesProperty()){
+                toutesLesDest = new VBox();
+                for (IDestination n : ((VueDuJeu) getScene().getRoot()).getJeu().destinationsInitialesProperty()) {
                     VueDestination vu = new VueDestination(n);
                     vu.createBindings();
+                    vu.setPrefWidth(instructionetPions.getWidth() - 25);
                     toutesLesDest.getChildren().add(vu);
                 }
-                getChildren().add(1, toutesLesDest);
-                toutesLesDest.setSpacing(20);
+                scrollDest.setContent(toutesLesDest);
+                instructionetPions.getChildren().add(1, scrollDest);
+                toutesLesDest.setSpacing(10);
                 toutesLesDest.setAlignment(Pos.CENTER);
+                toutesLesDest.setPrefHeight(instructionetPions.getHeight() / 2);
+                toutesLesDest.setAlignment(Pos.CENTER);
+                toutesLesDest.setPadding(new Insets(10));
             }
         });
 
@@ -181,17 +200,20 @@ public class VuePioche extends HBox {
             @Override
             public void onChanged(Change<? extends IDestination> change) {
                 change.next();
-                if(change.wasRemoved())
-                {
+                if (change.wasRemoved()) {
                     ArrayList<Node> removedList = new ArrayList<>();
-                    for(IDestination dest : change.getRemoved()) {
+                    for (IDestination dest : change.getRemoved()) {
 
                         for (Node node : toutesLesDest.getChildren()) {
                             VueDestination vu = (VueDestination) node;
-                            if(vu.getDestination().equals(dest)) removedList.add(node);
+                            if (vu.getDestination().equals(dest)) removedList.add(node);
                         }
                     }
                     toutesLesDest.getChildren().removeAll(removedList);
+                    if(toutesLesDest.getChildren().isEmpty()) {
+                        instructionetPions.getChildren().remove(scrollDest);
+
+                    }
                 }
             }
         });
@@ -203,7 +225,7 @@ public class VuePioche extends HBox {
                     IJoueur avantEchange = ((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().get();
                     ((VueDuJeu) getScene().getRoot()).getJeu().leNombreDePionsSouhaiteAEteRenseigne(saisiePions.getText());
                     if (!((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().get().equals(avantEchange))
-                        getChildren().remove(1);
+                        instructionetPions.getChildren().remove(1);
                 }
             }
         });
@@ -222,18 +244,22 @@ public class VuePioche extends HBox {
         pionsWagon.setOnAction(actionEvent ->
         {
             ((VueDuJeu) getScene().getRoot()).getJeu().nouveauxPionsWagonsDemandes();
-            if (!this.getChildren().contains(saisiePions)) this.getChildren().add(1, saisiePions);
+            if (!instructionetPions.getChildren().contains(saisiePions))
+                instructionetPions.getChildren().add(1, saisiePions);
         });
 
         pionsBateau.setOnAction(actionEvent ->
         {
             ((VueDuJeu) getScene().getRoot()).getJeu().nouveauxPionsBateauxDemandes();
-            if (!this.getChildren().contains(saisiePions)) this.getChildren().add(1, saisiePions);
+            if (!instructionetPions.getChildren().contains(saisiePions))
+                instructionetPions.getChildren().add(1, saisiePions);
         });
 
         ((VueDuJeu) getScene().getRoot()).getJeu().cartesTransportVisiblesProperty().addListener(new ListChangeListener<ICarteTransport>() {
             @Override
             public void onChanged(Change<? extends ICarteTransport> change) {
+                premiereLigne.setPadding(new Insets(5));
+                deuxiemeLigne.setPadding(new Insets(5));
                 change.next();
                 if (change.wasAdded()) {
                     for (ICarteTransport cartes : change.getAddedSubList()) {
@@ -267,6 +293,8 @@ public class VuePioche extends HBox {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 instructions.setText(t1);
+                instructions.setWrapText(true);
+                instructions.setPadding(new Insets(10));
             }
         });
     }

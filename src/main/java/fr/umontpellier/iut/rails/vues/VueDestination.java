@@ -31,7 +31,8 @@ public class VueDestination extends Button {
         Image foregroundImage =  new Image("images/dest.png");
 
         Background g = new Background(new BackgroundImage(foregroundImage,null, null, null, null));
-        this.setBackground(g);
+        //this.setBackground(g);
+        this.setStyle("-fx-border-color: black; -fx-border-width: 0 0 0 1px;");
         this.destination = destination;
         StringBuilder nomDestination = new StringBuilder();
         for (String nomVille : destination.getVilles())
