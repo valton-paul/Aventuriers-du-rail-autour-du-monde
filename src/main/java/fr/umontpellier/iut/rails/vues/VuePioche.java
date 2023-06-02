@@ -33,7 +33,6 @@ public class VuePioche extends HBox {
     private VBox sixCartes;
     private HBox premiereLigne;
     private HBox deuxiemeLigne;
-    private Label instructions;
     private Button pionsWagon;
     private Button pionsBateau;
     private Button piocheWagonButton;
@@ -53,8 +52,6 @@ public class VuePioche extends HBox {
         sixCartes = new VBox();
         premiereLigne = new HBox();
         deuxiemeLigne = new HBox();
-        instructions = new Label();
-        instructions.setFont(new Font("Arial", 30));
         piocheWagonButton = new Button();
         piocheBateauButton = new Button();
         saisiePions = new TextField();
@@ -76,7 +73,6 @@ public class VuePioche extends HBox {
 
         this.getChildren().add(toutSafuInstruction);
         this.getChildren().add(instructionetPions);
-        instructionetPions.getChildren().add(instructions);
 
 
         // ajout des boutons pions
@@ -286,15 +282,6 @@ public class VuePioche extends HBox {
                     premiereLigne.getChildren().removeAll(removeList);
                     deuxiemeLigne.getChildren().removeAll(removeList);
                 }
-            }
-        });
-
-        ((VueDuJeu) getScene().getRoot()).getJeu().instructionProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                instructions.setText(t1);
-                instructions.setWrapText(true);
-                instructions.setPadding(new Insets(10));
             }
         });
     }

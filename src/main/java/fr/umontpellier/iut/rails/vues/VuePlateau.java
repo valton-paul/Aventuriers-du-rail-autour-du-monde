@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -20,6 +21,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Font;
 import javafx.stage.Screen;
 
 import java.io.IOException;
@@ -39,6 +41,7 @@ public class VuePlateau extends Pane {
     @FXML
     private ImageView mapMonde;
     private Shape dernierNodeAppuyer;
+    private Label instructions;
 
     public VuePlateau() {
         try {
@@ -51,6 +54,8 @@ public class VuePlateau extends Pane {
         }
         setMinSize(Screen.getPrimary().getBounds().getWidth() / 3, Screen.getPrimary().getBounds().getHeight() / 3);
         dernierNodeAppuyer = null;
+        instructions = new Label();
+        instructions.setFont(new Font("Arial", 30));
     }
 
     EventHandler<MouseEvent> choixRoute = event -> {
@@ -111,6 +116,14 @@ public class VuePlateau extends Pane {
                 }
             });
         }
+
+        ((VueDuJeu)getScene().getRoot()).getJeu().instructionProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                instructions.setText(t1);
+            }
+        });
+
     }
 
             private void ajouterPorts() {
