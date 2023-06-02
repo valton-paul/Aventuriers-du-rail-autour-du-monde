@@ -8,6 +8,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -15,6 +17,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 
@@ -43,15 +46,25 @@ public class VueDemarragePartie extends HBox {
         ecrire.getChildren().addAll(zoneDeTexte, valider);
         this.getChildren().add(instructionsEtPasser);
         this.getChildren().add(choixDesDestinations);
-        instructionsEtPasser.getChildren().addAll(instruction, garder);
+        instructionsEtPasser.getChildren().add(garder);
+        garder.setStyle("-fx-background-color: black; -fx-color-label-visible: white; -fx-border-radius: 20px;");
+        garder.setTextFill(Color.WHITE);
+        garder.setPadding(new Insets(20, 40, 20, 40));
+        this.setStyle("-fx-border-width: 3px 0 0 0; -fx-border-color: black;");
+        this.setPadding(new Insets(50));
+        this.setAlignment(Pos.CENTER);
 
-        this.setSpacing(20);
+
+            this.setSpacing(20);
         instructionsEtPasser.setSpacing(20);
         choixDesDestinations.setSpacing(20);
         ecrire.setSpacing(10);
     }
 
     public void createBindings() {
+
+        this.setPrefWidth(getScene().getWidth());
+
 
         ((VueDuJeu) getScene().getRoot()).getJeu()
                 .instructionProperty().addListener(new ChangeListener<String>() {
