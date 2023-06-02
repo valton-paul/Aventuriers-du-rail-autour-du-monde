@@ -12,11 +12,9 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 
 /**
  * Cette classe correspond à la fenêtre principale de l'application.
@@ -39,6 +37,14 @@ public class VueDuJeu extends BorderPane {
 
     public VueDuJeu(IJeu jeu) {
         this.jeu = jeu;
+        String imagePath = "images/fond23.png";
+        BackgroundImage backgroundImage = new BackgroundImage(
+                new Image(imagePath),
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER,
+                new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, true, true, true, true)
+        );
+        this.setBackground(new Background(backgroundImage));
         menusDuBas = new HBox();
         plateau = new VuePlateau();
         autresJoueurs = new VueAutresJoueurs();
