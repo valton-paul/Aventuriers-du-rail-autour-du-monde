@@ -66,19 +66,6 @@ public class VueJoueurCourant extends ScrollPane {
             }
             villesDest.replace(villesDest.length()-3, villesDest.length()-1, ""); //Permet d'enlever le dernier tiret
             Label uneDestination = new Label(villesDest.toString());
-            uneDestination.setOnMouseEntered(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent mouseEvent) {
-                    uneDestination.setStyle("-fx-font-weight: bold");
-                }
-            });
-
-            uneDestination.setOnMouseExited(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent mouseEvent) {
-                    uneDestination.setStyle("-fx-font-weight: normal");
-                }
-            });
             destinations.getChildren().add(uneDestination);
         }
         principal.getChildren().add(cartesTransport);
@@ -144,7 +131,6 @@ public class VueJoueurCourant extends ScrollPane {
                 }
                 else if (change.wasRemoved())
                 {
-                    System.out.println("remove");
                     for(ICarteTransport carte : change.getRemoved())
                     {
                         all :
@@ -154,7 +140,6 @@ public class VueJoueurCourant extends ScrollPane {
                            for(Node node1 : hbox.getChildren())
                            {
                                VueCarteTransport vue = (VueCarteTransport) node1;
-                               System.out.println("oui");
                                 if(carte.equals(vue.getCarteTransport())) hbox.getChildren().remove(vue);
                                break all;
                            }

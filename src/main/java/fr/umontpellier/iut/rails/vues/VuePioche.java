@@ -141,7 +141,7 @@ public class VuePioche extends HBox {
         sixCartes.getChildren().addAll(premiereLigne, deuxiemeLigne);
         toutSafuInstruction.getChildren().add(sixCartes);
         toutSafuInstruction.getChildren().add(passer);
-        passer.setStyle("-fx-padding: 25px 40px; -fx-background-color: #3636b8;");
+        passer.setStyle("-fx-padding: 25px 40px; -fx-background-color: #3636b8; -fx-border-radius: 100");
         passer.setFont(new Font("Arial", 30));
         passer.setTextFill(Color.WHITE);
         passer.setOnMouseEntered(event -> this.getScene().setCursor(Cursor.HAND));
