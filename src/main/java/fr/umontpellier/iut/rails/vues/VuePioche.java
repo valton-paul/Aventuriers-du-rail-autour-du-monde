@@ -194,6 +194,14 @@ public class VuePioche extends HBox {
             }
         });
 
+        ((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().addListener(new ChangeListener<IJoueur>() {
+            @Override
+            public void changed(ObservableValue<? extends IJoueur> observableValue, IJoueur iJoueur, IJoueur t1) {
+                instructionetPions.getChildren().remove(saisiePions);
+                getChildren().remove(scrollDest);
+            }
+        });
+
         ((VueDuJeu) getScene().getRoot()).getJeu().destinationsInitialesProperty().addListener(new ListChangeListener<IDestination>() {
             @Override
             public void onChanged(Change<? extends IDestination> change) {
@@ -223,8 +231,9 @@ public class VuePioche extends HBox {
                     IJoueur avantEchange = ((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().get();
                     ((VueDuJeu) getScene().getRoot()).getJeu().leNombreDePionsSouhaiteAEteRenseigne(saisiePions.getText());
                     if (!((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().get().equals(avantEchange))
-                        instructionetPions.getChildren().remove(1);
+                        instructionetPions.getChildren().remove(saisiePions);
                 }
+                saisiePions.clear();
             }
         });
 
