@@ -181,7 +181,7 @@ public class VuePioche extends HBox {
                 for (IDestination n : ((VueDuJeu) getScene().getRoot()).getJeu().destinationsInitialesProperty()) {
                     VueDestination vu = new VueDestination(n);
                     vu.createBindings();
-                    vu.setPrefWidth(instructionetPions.getWidth() - 25);
+                    vu.setPrefWidth(instructionetPions.getWidth() - 50);
                     toutesLesDest.getChildren().add(vu);
                 }
                 scrollDest.setContent(toutesLesDest);

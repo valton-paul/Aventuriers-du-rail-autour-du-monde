@@ -3,6 +3,8 @@ package fr.umontpellier.iut.rails.vues;
 import fr.umontpellier.iut.rails.IJoueur;
 import fr.umontpellier.iut.rails.IRoute;
 import fr.umontpellier.iut.rails.mecanique.data.CarteTransport;
+import javafx.animation.SequentialTransition;
+import javafx.animation.TranslateTransition;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -10,6 +12,7 @@ import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -17,12 +20,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.stage.Screen;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,6 +47,7 @@ public class VuePlateau extends Pane {
     private ImageView mapMonde;
     private Shape dernierNodeAppuyer;
     private Label instructions;
+    private VBox instruct;
 
     public VuePlateau() {
         try {
@@ -52,10 +58,18 @@ public class VuePlateau extends Pane {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        instruct = new VBox();
         setMinSize(Screen.getPrimary().getBounds().getWidth() / 3, Screen.getPrimary().getBounds().getHeight() / 3);
         dernierNodeAppuyer = null;
         instructions = new Label();
         instructions.setFont(new Font("Arial", 30));
+        instructions.setScaleZ(3);
+        this.setScaleZ(1);
+        this.getChildren().add(instruct);
+        instruct.getChildren().add(instructions);
+        instructions.setTextFill(Color.WHITE);
+        instruct.setStyle("-fx-background-color: Black; -fx-opacity: 0.75; -fx-border-radius: 10px; -fx-background-radius: 10px;");
+        instructions.setPadding(new Insets(0, 10, 0, 10));
     }
 
     EventHandler<MouseEvent> choixRoute = event -> {
@@ -70,6 +84,7 @@ public class VuePlateau extends Pane {
         ajouterPorts();
         ajouterRoutes();
         bindRedimensionEtCentragePlateau();
+        instruct.setLayoutX(getScene().getWidth()/3.5);
 
         for(IJoueur j : ((VueDuJeu)getScene().getRoot()).getJeu().getJoueurs())
         {
@@ -117,10 +132,25 @@ public class VuePlateau extends Pane {
             });
         }
 
+        TranslateTransition aller = new TranslateTransition(Duration.seconds(.25), instruct);
+        TranslateTransition retour = new TranslateTransition(Duration.seconds(.24), instruct);
+        SequentialTransition transitions = new SequentialTransition();
+        transitions.getChildren().addAll(aller, retour);
+
+        aller.setFromX(0);
+        aller.setToX(-3 * getScene().getWidth()/3.5);
+        //aller.setNode(null);
+
+
+        retour.setFromX(-3 * getScene().getWidth()/3.5);
+        retour.setToX(0);
+        //aller.setNode(instruct);
+
         ((VueDuJeu)getScene().getRoot()).getJeu().instructionProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 instructions.setText(t1);
+                transitions.play();
             }
         });
 
@@ -136,6 +166,7 @@ public class VuePlateau extends Pane {
                     bindCerclePortAuPlateau(positionPortSurPlateau, cerclePort);
                     cerclePort.setOnMouseClicked(new EventHandler<MouseEvent>() {
                         @Override
+
                         public void handle(MouseEvent mouseEvent) {
                             ((VueDuJeu) getScene().getRoot()).getJeu().unPortAEteChoisi(nomPort);
                             dernierNodeAppuyer = cerclePort;
