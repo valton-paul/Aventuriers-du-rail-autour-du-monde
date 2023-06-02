@@ -1,5 +1,6 @@
 package fr.umontpellier.iut.rails.vues;
 
+import fr.umontpellier.iut.rails.IJoueur;
 import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -27,10 +28,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Cette classe correspond à une nouvelle fenêtre permettant de choisir le nombre et les noms des joueurs de la partie.
@@ -39,6 +37,8 @@ import java.util.Random;
  * Lorsque l'utilisateur a fini de saisir les noms de joueurs, il demandera à démarrer la partie.
  */
 public class VueChoixJoueurs extends Stage {
+
+    private HashMap<String, String> imagesDesJoueurs;
 
 
     private final ObservableList<String> nomsJoueurs;
@@ -63,10 +63,18 @@ public class VueChoixJoueurs extends Stage {
         visages.add(new ImageView(new Image("images/cartesWagons/avatar-ROSE.png")));
         visages.add(new ImageView(new Image("images/cartesWagons/avatar-JAUNE.png")));
         visages.add(new ImageView(new Image("images/cartesWagons/avatar-VERT.png")));
+        for (ImageView imageView : visages) {
+            String imagePath = imageView.getImage().getUrl();
+            String imageName = imagePath.substring(imagePath.lastIndexOf("/") + 1);
+            String imageID = imageName.substring(0, imageName.lastIndexOf("."));
+            imageView.setId(imageID);
+        }
+
         imagesDejaPrises = new ArrayList<>();
         ajouter = new Button("+");
         gandefentre = new BorderPane();
         tousRempli = true;
+        imagesDesJoueurs = new HashMap<>();
 
 
         String imageUrl = "images/fond23.png"; // ou fond22 j'hésite choisi celui que tu veux
@@ -154,6 +162,23 @@ public class VueChoixJoueurs extends Stage {
                 }
                 if (tousRempli) {
                     nomsJoueurs.addAll(noms);
+
+                    for (Node n : container.getChildren()) {
+                        if (n instanceof VBox box) {
+                            for (Node element : box.getChildren()) {
+                                String nomJoueur = "";
+                                String lienImage = "";
+                                if (element instanceof TextField) {
+                                    nomJoueur = ((TextField) element).getText();
+                                }else if(element instanceof ImageView){
+                                    lienImage = ((ImageView) element).getId();
+                                }
+                                imagesDesJoueurs.put(nomJoueur, lienImage);
+                            }
+                        }
+                    }
+
+
                     close();
                 }else{
                     vibrate(VueChoixJoueurs.this);
@@ -389,4 +414,7 @@ public class VueChoixJoueurs extends Stage {
         timeline.play();
     }
 
+    public HashMap<String, String> getImagesDesJoueurs() {
+        return imagesDesJoueurs;
+    }
 }
