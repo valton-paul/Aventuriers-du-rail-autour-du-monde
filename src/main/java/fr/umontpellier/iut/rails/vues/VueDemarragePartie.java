@@ -55,7 +55,7 @@ public class VueDemarragePartie extends HBox {
         this.setAlignment(Pos.CENTER);
 
 
-            this.setSpacing(20);
+        this.setSpacing(20);
         instructionsEtPasser.setSpacing(20);
         choixDesDestinations.setSpacing(20);
         ecrire.setSpacing(10);
@@ -63,7 +63,7 @@ public class VueDemarragePartie extends HBox {
 
     public void createBindings() {
 
-        this.setPrefWidth(getScene().getWidth());
+        this.setPrefWidth(Integer.MAX_VALUE);
 
 
         ((VueDuJeu) getScene().getRoot()).getJeu()

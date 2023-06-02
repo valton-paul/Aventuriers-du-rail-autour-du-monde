@@ -68,8 +68,8 @@ public class VuePlateau extends Pane {
         this.getChildren().add(instruct);
         instruct.getChildren().add(instructions);
         instructions.setTextFill(Color.WHITE);
-        instruct.setStyle("-fx-background-color: Black; -fx-opacity: 0.75; -fx-border-radius: 10px; -fx-background-radius: 10px;");
-        instructions.setPadding(new Insets(0, 10, 0, 10));
+        instruct.setStyle("-fx-background-color: Black; -fx-opacity: 0.75; -fx-border-radius: 10px; -fx-background-radius: 0px 0px 20px 20px;");
+        instructions.setPadding(new Insets(5));
     }
 
     EventHandler<MouseEvent> choixRoute = event -> {
@@ -85,6 +85,7 @@ public class VuePlateau extends Pane {
         ajouterRoutes();
         bindRedimensionEtCentragePlateau();
         instruct.setLayoutX(getScene().getWidth()/3.5);
+        instruct.setLayoutY(40);
 
         for(IJoueur j : ((VueDuJeu)getScene().getRoot()).getJeu().getJoueurs())
         {
