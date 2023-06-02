@@ -63,6 +63,7 @@ public class VuePioche extends HBox {
         passer = new Button("Passer");
         instructionetPions = new VBox();
         instructionetPions.setAlignment(Pos.CENTER);
+        instructionetPions.setSpacing(10);
         scrollDest = new ScrollPane();
         toutSafuInstruction = new HBox();
         this.setStyle("-fx-border-width: 3px 0 0 0; -fx-border-color: black;");
@@ -136,12 +137,13 @@ public class VuePioche extends HBox {
         toutSafuInstruction.setSpacing(35);
         sixCartes.getChildren().addAll(premiereLigne, deuxiemeLigne);
         toutSafuInstruction.getChildren().add(sixCartes);
-        toutSafuInstruction.getChildren().add(passer);
-        passer.setStyle("-fx-padding: 25px 40px; -fx-background-color: #3636b8; -fx-border-radius: 100");
+        instructionetPions.getChildren().add(passer);
+        passer.setStyle("-fx-background-color: #3636b8; -fx-border-radius: 100");
         passer.setFont(new Font("Arial", 30));
         passer.setTextFill(Color.WHITE);
         passer.setOnMouseEntered(event -> this.getScene().setCursor(Cursor.HAND));
         passer.setOnMouseExited(event -> this.getScene().setCursor(Cursor.DEFAULT));
+        passer.setPrefWidth(instructionetPions.getPrefWidth());
 
 
 
@@ -152,7 +154,7 @@ public class VuePioche extends HBox {
 
     public void createBindings() {
         instructionetPions.setStyle("-fx-border-color: black; -fx-border-width: 0 0 0 3px;");
-        instructionetPions.setMaxWidth(getScene().getWidth() - ((VueDuJeu) getScene().getRoot()).getPlateau().getWidth());
+        instructionetPions.setPrefWidth(getScene().getWidth() - toutSafuInstruction.getWidth());
         toutSafuInstruction.setMinWidth(((VueDuJeu) getScene().getRoot()).getPlateau().getWidth());
 
 
@@ -186,7 +188,7 @@ public class VuePioche extends HBox {
                 instructionetPions.getChildren().add(1, scrollDest);
                 toutesLesDest.setSpacing(10);
                 toutesLesDest.setAlignment(Pos.CENTER);
-                toutesLesDest.setPrefHeight(instructionetPions.getHeight() / 2);
+                toutesLesDest.setPrefHeight(instructionetPions.getHeight() / 1.7);
                 toutesLesDest.setAlignment(Pos.CENTER);
                 toutesLesDest.setPadding(new Insets(10));
             }
