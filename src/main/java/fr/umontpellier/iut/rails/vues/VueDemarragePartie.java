@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -43,6 +44,11 @@ public class VueDemarragePartie extends HBox {
         zoneDeTexte = new TextField();
         passer = new Button("Passer");
 
+
+
+        valider.setOnMouseEntered(event -> this.getScene().setCursor(Cursor.HAND));
+        valider.setOnMouseExited(event -> this.getScene().setCursor(Cursor.DEFAULT));
+
         ecrire.getChildren().addAll(zoneDeTexte, valider);
         this.getChildren().add(instructionsEtPasser);
         this.getChildren().add(choixDesDestinations);
@@ -50,6 +56,15 @@ public class VueDemarragePartie extends HBox {
         garder.setStyle("-fx-background-color: black; -fx-color-label-visible: white; -fx-border-radius: 20px;");
         garder.setTextFill(Color.WHITE);
         garder.setPadding(new Insets(20, 40, 20, 40));
+
+        valider.setStyle("-fx-background-color: green; -fx-color-label-visible: white; -fx-border-radius: 20px;");
+        valider.setTextFill(Color.WHITE);
+        valider.setPadding(new Insets(20, 40, 20, 40));
+
+        zoneDeTexte.setStyle("-fx-border-radius: 20px;");
+        zoneDeTexte.setPadding(new Insets(20, 40, 20, 40));
+        zoneDeTexte.setAlignment(Pos.CENTER);
+
         this.setStyle("-fx-border-width: 3px 0 0 0; -fx-border-color: black;");
         this.setPadding(new Insets(50));
         this.setAlignment(Pos.CENTER);
@@ -62,6 +77,9 @@ public class VueDemarragePartie extends HBox {
     }
 
     public void createBindings() {
+
+        passer.setOnMouseEntered(event -> this.getScene().setCursor(Cursor.HAND));
+        passer.setOnMouseExited(event -> this.getScene().setCursor(Cursor.DEFAULT));
 
         this.setPrefWidth(Integer.MAX_VALUE);
 
