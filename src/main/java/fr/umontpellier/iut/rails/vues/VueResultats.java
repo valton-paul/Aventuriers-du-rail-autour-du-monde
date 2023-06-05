@@ -71,16 +71,15 @@ public class VueResultats extends BorderPane {
         Rectangle r1 = new Rectangle();
         Rectangle r3 = new Rectangle();
 
-        r2.setHeight(150);
-        r1.setHeight(180);
-        r3.setHeight(125);
-        r2.setWidth(100);
-        r1.setWidth(100);
-        r3.setWidth(100);
+        r2.setHeight(450);
+        r1.setHeight(540);
+        r3.setHeight(375);
+        r2.setWidth(300);
+        r1.setWidth(300);
+        r3.setWidth(300);
         r2.setFill(Color.SILVER);
         r1.setFill(Color.GOLD);
         r3.setFill(Color.CHOCOLATE);
-
 
         deuxieme.getChildren().add(r2);
         premier.getChildren().add(r1);

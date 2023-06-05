@@ -148,7 +148,7 @@ public class VuePioche extends HBox {
 
 
         allerALaFin = new Button("Finir");
-        //toutSafuInstruction.getChildren().add(allerALaFin);
+        toutSafuInstruction.getChildren().add(allerALaFin);
     }
 
 
