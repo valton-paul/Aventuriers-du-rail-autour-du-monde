@@ -24,6 +24,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Cette classe présente les éléments des joueurs autres que le joueur courant,
@@ -33,10 +35,16 @@ import java.util.ArrayList;
  */
 public class VueAutresJoueurs extends VBox {
     private ArrayList<IJoueur> listeJoueurOrdre;
-
+    private static HashMap<String, String> imagesDesJoueurs;
     public VueAutresJoueurs()
     {
         this.setSpacing(20);
+    }
+
+    public static void setImages(HashMap<String, String> images)
+    {
+        imagesDesJoueurs = new HashMap<>();
+        imagesDesJoueurs.putAll(images);
     }
 
     public void createBindings()
@@ -51,7 +59,16 @@ public class VueAutresJoueurs extends VBox {
                 listeJoueurOrdre.remove(t1);
                 creationVBoxJoueurSaufCourant();
                 listeJoueurOrdre.add(t1);
-                VueJoueurCourant vjc = new VueJoueurCourant(((VueDuJeu) getScene().getRoot()).getJeu());
+                String lienImg = "";
+                for(Map.Entry<String, String> entry : imagesDesJoueurs.entrySet())
+                {
+                    if(entry.getKey().equals(((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().get().getNom()))
+                    {
+                        lienImg = entry.getValue();
+                        break;
+                    }
+                }
+                VueJoueurCourant vjc = new VueJoueurCourant(((VueDuJeu) getScene().getRoot()).getJeu(), lienImg);
                 Color backgroundColor = Color.web(getCouleur(t1));
                 Color colorWithOpacity = new Color(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue(), 0.5);
                 BackgroundFill backgroundFill = new BackgroundFill(colorWithOpacity, null, null);
@@ -69,6 +86,16 @@ public class VueAutresJoueurs extends VBox {
         {
             VBox principal = new VBox();
             HBox profil = new HBox();
+            for(Map.Entry<String, String> entry : imagesDesJoueurs.entrySet())
+            {
+                if(entry.getKey().equals(j.getNom()))
+                {
+                    ImageView img = new ImageView(new Image("images/cartesWagons/"+entry.getValue()+".png"));
+                    img.setFitHeight(75);
+                    img.setFitWidth(60);
+                    profil.getChildren().add(img);
+                }
+            }
             principal.getChildren().add(profil);
             this.getChildren().add(principal);
             Label label = new Label(j.getNom() + " | " + j.getScore() + " points");

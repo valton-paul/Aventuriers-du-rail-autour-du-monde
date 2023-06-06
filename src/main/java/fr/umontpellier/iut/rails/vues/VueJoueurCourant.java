@@ -8,9 +8,12 @@ import fr.umontpellier.iut.rails.mecanique.data.Ville;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -28,10 +31,14 @@ import java.util.ArrayList;
  */
 public class VueJoueurCourant extends ScrollPane {
     private final VBox cartesTransport;
-    public VueJoueurCourant(IJeu jeu) {
+    public VueJoueurCourant(IJeu jeu, String lien) {
 
         VBox principal = new VBox();
         HBox profil = new HBox();
+        ImageView img = new ImageView(new Image("images/cartesWagons/"+lien+".png"));
+        img.setFitHeight(75);
+        img.setFitWidth(60);
+        profil.getChildren().add(img);
         cartesTransport = new VBox();
         principal.getChildren().add(profil);
         this.setContent(principal);
@@ -41,6 +48,7 @@ public class VueJoueurCourant extends ScrollPane {
         profil.getChildren().add(label);
         //this.setSpacing(20);
         this.setPadding(new Insets(0, 10, 0, 5));
+        profil.setAlignment(Pos.CENTER_LEFT);
 
         Color backgroundColor = Color.web(getCouleur(jeu.joueurCourantProperty().get()));
         Color colorWithOpacity = new Color(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue(), 0.5);

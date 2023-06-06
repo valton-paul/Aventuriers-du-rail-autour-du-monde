@@ -25,6 +25,7 @@ import javafx.scene.paint.*;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -38,7 +39,7 @@ import java.util.*;
  */
 public class VueChoixJoueurs extends Stage {
 
-    private HashMap<String, String> imagesDesJoueurs;
+    private static HashMap<String, String> imagesDesJoueurs;
 
 
     private final ObservableList<String> nomsJoueurs;
@@ -68,6 +69,15 @@ public class VueChoixJoueurs extends Stage {
             String imageName = imagePath.substring(imagePath.lastIndexOf("/") + 1);
             String imageID = imageName.substring(0, imageName.lastIndexOf("."));
             imageView.setId(imageID);
+            imageView.setOnMouseEntered(e -> {
+                imageView.setFitHeight(400);
+                imageView.setFitWidth(312);
+            });
+            imageView.setOnMouseExited(e -> {
+                imageView.setFitHeight(420);
+                imageView.setFitWidth(332);
+            });
+            imageView.setOnMouseClicked(e -> afficherChoix(imageView));
         }
 
         imagesDejaPrises = new ArrayList<>();
@@ -161,26 +171,24 @@ public class VueChoixJoueurs extends Stage {
                     }
                 }
                 if (tousRempli) {
-                    nomsJoueurs.addAll(noms);
-
                     for (Node n : container.getChildren()) {
                         if (n instanceof VBox box) {
+                            String nomJoueur = "";
+                            String lienImage = "";
                             for (Node element : box.getChildren()) {
-                                String nomJoueur = "";
-                                String lienImage = "";
                                 if (element instanceof TextField) {
                                     nomJoueur = ((TextField) element).getText();
-                                }else if(element instanceof ImageView){
-                                    lienImage = ((ImageView) element).getId();
+                                } else if (element instanceof ImageView) {
+                                    lienImage = element.getId();
                                 }
-                                imagesDesJoueurs.put(nomJoueur, lienImage);
                             }
+                            imagesDesJoueurs.put(nomJoueur, lienImage);
                         }
                     }
-
-
+                    VueAutresJoueurs.setImages(imagesDesJoueurs);
+                    nomsJoueurs.addAll(noms);
                     close();
-                }else{
+                } else {
                     vibrate(VueChoixJoueurs.this);
                     noms.clear();
                 }
@@ -414,7 +422,70 @@ public class VueChoixJoueurs extends Stage {
         timeline.play();
     }
 
-    public HashMap<String, String> getImagesDesJoueurs() {
-        return imagesDesJoueurs;
+    private void afficherChoix(ImageView imgCourante)
+    {
+        Stage popup = new Stage();
+        popup.initModality(Modality.APPLICATION_MODAL);
+        popup.initOwner(this);
+        HBox imageDispo = new HBox();
+        imageDispo.setSpacing(25);
+
+        for(int i = 0; i < visages.size(); i++)
+        {
+            if(!imagesDejaPrises.contains(i))
+            {
+                ImageView otherImg = new ImageView((visages.get(i).getImage()));
+                otherImg.setId(""+i);
+                imageDispo.getChildren().add(otherImg);
+                otherImg.setOnMouseEntered(e -> {
+                    otherImg.setFitHeight(400);
+                    otherImg.setFitWidth(312);
+                });
+                otherImg.setOnMouseExited(e -> {
+                    otherImg.setFitHeight(420);
+                    otherImg.setFitWidth(332);
+                });
+                otherImg.setOnMouseClicked(e -> {
+                    ArrayList<Node> removedList = new ArrayList<>();
+                    imagesDejaPrises.add(Integer.parseInt(otherImg.getId()));
+                    imagesDejaPrises.remove((Object)visages.indexOf(imgCourante));
+                    boolean oui = false;
+                    for(Node node : this.container.getChildren())
+                    {
+                        if(node instanceof VBox n)
+                        {
+                            for(Node nodeFils : n.getChildren())
+                            {
+                                if(nodeFils instanceof ImageView img)
+                                {
+                                    if(img.equals(imgCourante))
+                                    {
+                                        removedList.add(nodeFils);
+                                        oui = true;
+                                    }
+                                }
+                                if(oui) break;
+                            }
+                            if(oui)
+                            {
+                                n.getChildren().removeAll(removedList);
+                                for(ImageView k : visages)
+                                {
+                                    if(k.getImage().equals(otherImg.getImage()))
+                                    {
+                                        n.getChildren().add(0, k);
+                                        break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    popup.close();
+                });
+            }
+        }
+        popup.setScene(new Scene(imageDispo));
+        popup.showAndWait();
     }
 }

@@ -95,12 +95,6 @@ public class VueResultats extends BorderPane {
 
 
 
-
-
-
-
-
-
     }
 
     public void creatBindings(){
