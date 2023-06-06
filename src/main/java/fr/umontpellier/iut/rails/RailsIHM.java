@@ -1,10 +1,8 @@
 package fr.umontpellier.iut.rails;
 
 import fr.umontpellier.iut.rails.mecanique.Jeu;
-import fr.umontpellier.iut.rails.vues.DonneesGraphiques;
-import fr.umontpellier.iut.rails.vues.VueChoixJoueurs;
-import fr.umontpellier.iut.rails.vues.VueDuJeu;
-import fr.umontpellier.iut.rails.vues.VueResultats;
+import fr.umontpellier.iut.rails.mecanique.Joueur;
+import fr.umontpellier.iut.rails.vues.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -18,6 +16,7 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class RailsIHM extends Application {
@@ -58,6 +57,16 @@ public class RailsIHM extends Application {
             nomsJoueurs.add("Elaine");
         }
         jeu = new Jeu(nomsJoueurs.toArray(new String[0]));
+        for(IJoueur joueur : jeu.getJoueurs()){
+            for(Map.Entry<String, String> entry : VueAutresJoueurs.getImagesDesJoueurs().entrySet()){
+                if(entry.getKey().equals(joueur.getNom())){
+                    String[] couleurTab = entry.getValue().split("-");
+                    String couleurJoueur = couleurTab[1];
+                    joueur.setCouleur(IJoueur.CouleurJoueur.valueOf(couleurJoueur));
+                    break;
+                }
+            }
+        }
         VueDuJeu vueDuJeu = new VueDuJeu(jeu);
         Scene scene = new Scene(vueDuJeu, Screen.getPrimary().getBounds().getWidth() * DonneesGraphiques.pourcentageEcran, Screen.getPrimary().getBounds().getHeight() * DonneesGraphiques.pourcentageEcran); // la scene doit être créée avant de mettre en place les bindings
         vueDuJeu.creerBindings();

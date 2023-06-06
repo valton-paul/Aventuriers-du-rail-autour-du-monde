@@ -23,6 +23,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Cette classe présente les éléments appartenant au joueur courant.
@@ -42,6 +43,7 @@ public class VueJoueurCourant extends ScrollPane {
         cartesTransport = new VBox();
         principal.getChildren().add(profil);
         this.setContent(principal);
+
         Label label = new Label(jeu.joueurCourantProperty().get().getNom() + " | " + jeu.joueurCourantProperty().get().getScore() + " points");
         label.setTextFill(Color.web(getCouleur(jeu.joueurCourantProperty().get())));
         label.setFont(new Font("Arial", 30));

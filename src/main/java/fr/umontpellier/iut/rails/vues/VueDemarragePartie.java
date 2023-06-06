@@ -104,6 +104,7 @@ public class VueDemarragePartie extends HBox {
             public void onChanged(Change<? extends IDestination> change) {
                 change.next();
                 if (change.wasAdded()) {
+                    getChildren().remove(ecrire);
                     for (IDestination destination : change.getAddedSubList()) {
                         VueDestination d = new VueDestination(destination);
                         d.createBindings();
@@ -121,6 +122,7 @@ public class VueDemarragePartie extends HBox {
                 }
                 if (((VueDuJeu) getScene().getRoot()).getJeu().destinationsInitialesProperty().isEmpty() && !getChildren().contains(ecrire)) {
                     getChildren().add(ecrire);
+                    zoneDeTexte.clear();
                 }
             }
         };
@@ -129,12 +131,19 @@ public class VueDemarragePartie extends HBox {
         EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                ((VueDuJeu) getScene().getRoot()).getJeu().leNombreDePionsSouhaiteAEteRenseigne(zoneDeTexte.getText());
-                if (!getChildren().contains(choixDesDestinations)) getChildren().add(choixDesDestinations);
+                try {
+                    int a = Integer.parseInt(zoneDeTexte.getText());
+                    ((VueDuJeu) getScene().getRoot()).getJeu().leNombreDePionsSouhaiteAEteRenseigne(zoneDeTexte.getText());
+                    if (!getChildren().contains(choixDesDestinations)) getChildren().add(choixDesDestinations);
+                    getChildren().remove(ecrire);
+                }catch (Exception e){
+                    System.out.println("Pas un entier");
+                }
             }
         };
         zoneDeTexte.setOnAction(event);
         valider.setOnAction(event);
+
 
 
     }

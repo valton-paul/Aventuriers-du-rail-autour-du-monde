@@ -69,14 +69,8 @@ public class VueChoixJoueurs extends Stage {
             String imageName = imagePath.substring(imagePath.lastIndexOf("/") + 1);
             String imageID = imageName.substring(0, imageName.lastIndexOf("."));
             imageView.setId(imageID);
-            imageView.setOnMouseEntered(e -> {
-                imageView.setFitHeight(400);
-                imageView.setFitWidth(312);
-            });
-            imageView.setOnMouseExited(e -> {
-                imageView.setFitHeight(420);
-                imageView.setFitWidth(332);
-            });
+            imageView.setOnMouseEntered(event -> this.getScene().setCursor(Cursor.HAND));
+            imageView.setOnMouseExited(event -> this.getScene().setCursor(Cursor.DEFAULT));
             imageView.setOnMouseClicked(e -> afficherChoix(imageView));
         }
 
@@ -155,13 +149,20 @@ public class VueChoixJoueurs extends Stage {
         lancer.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                ArrayList<String> nomsDejaPris = new ArrayList<>();
                 tousRempli = true;
                 for (Node n : container.getChildren()) {
                     if (n instanceof VBox box) {
                         for (Node element : box.getChildren()) {
                             if (element instanceof TextField) {
                                 if (!((TextField) element).getText().isEmpty()) {
-                                    noms.add(((TextField) element).getText());
+                                    String nomDuJoueur = ((TextField) element).getText();
+                                    if(nomsDejaPris.contains(nomDuJoueur)){
+                                        tousRempli = false;
+                                    }else{
+                                        noms.add(nomDuJoueur);
+                                        nomsDejaPris.add(nomDuJoueur);
+                                    }
                                 } else {
                                     tousRempli = false;
                                 }
@@ -186,6 +187,7 @@ public class VueChoixJoueurs extends Stage {
                         }
                     }
                     VueAutresJoueurs.setImages(imagesDesJoueurs);
+
                     nomsJoueurs.addAll(noms);
                     close();
                 } else {
@@ -424,6 +426,7 @@ public class VueChoixJoueurs extends Stage {
 
     private void afficherChoix(ImageView imgCourante)
     {
+        if(imagesDejaPrises.size() == 5) return;
         Stage popup = new Stage();
         popup.initModality(Modality.APPLICATION_MODAL);
         popup.initOwner(this);
@@ -435,16 +438,10 @@ public class VueChoixJoueurs extends Stage {
             if(!imagesDejaPrises.contains(i))
             {
                 ImageView otherImg = new ImageView((visages.get(i).getImage()));
+                otherImg.setOnMouseEntered(event -> this.getScene().setCursor(Cursor.HAND));
+                otherImg.setOnMouseExited(event -> this.getScene().setCursor(Cursor.DEFAULT));
                 otherImg.setId(""+i);
                 imageDispo.getChildren().add(otherImg);
-                otherImg.setOnMouseEntered(e -> {
-                    otherImg.setFitHeight(400);
-                    otherImg.setFitWidth(312);
-                });
-                otherImg.setOnMouseExited(e -> {
-                    otherImg.setFitHeight(420);
-                    otherImg.setFitWidth(332);
-                });
                 otherImg.setOnMouseClicked(e -> {
                     ArrayList<Node> removedList = new ArrayList<>();
                     imagesDejaPrises.add(Integer.parseInt(otherImg.getId()));

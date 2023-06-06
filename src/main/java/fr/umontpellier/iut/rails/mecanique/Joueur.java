@@ -54,7 +54,7 @@ public class Joueur implements IJoueur {
     /**
      * CouleurJouer du joueur (pour représentation sur le plateau)
      */
-    private final CouleurJoueur couleur;
+    private CouleurJoueur couleur;
     /**
      * Liste des villes sur lesquelles le joueur a construit un port
      */
@@ -144,6 +144,10 @@ public class Joueur implements IJoueur {
     @Override
     public int getNbPorts() {
         return ports.size();
+    }
+    @Override
+    public void setCouleur(CouleurJoueur c){
+        this.couleur = c;
     }
     public Jeu getJeu() {
         return jeu;

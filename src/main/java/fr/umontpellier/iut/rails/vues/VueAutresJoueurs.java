@@ -91,8 +91,8 @@ public class VueAutresJoueurs extends VBox {
                 if(entry.getKey().equals(j.getNom()))
                 {
                     ImageView img = new ImageView(new Image("images/cartesWagons/"+entry.getValue()+".png"));
-                    img.setFitHeight(75);
-                    img.setFitWidth(60);
+                    img.setFitHeight(50);
+                    img.setFitWidth(40);
                     profil.getChildren().add(img);
                 }
             }
@@ -106,6 +106,10 @@ public class VueAutresJoueurs extends VBox {
             profil.getChildren().add(label);
             label.setFont(new Font("Arial", 20));
         }
+    }
+
+    public static HashMap<String, String> getImagesDesJoueurs() {
+        return imagesDesJoueurs;
     }
 
     public static String getCouleur(IJoueur j)

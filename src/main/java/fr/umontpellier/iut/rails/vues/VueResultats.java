@@ -4,16 +4,24 @@ import fr.umontpellier.iut.rails.IJoueur;
 import fr.umontpellier.iut.rails.RailsIHM;
 import fr.umontpellier.iut.rails.mecanique.Joueur;
 import fr.umontpellier.iut.rails.mecanique.etatsJoueur.demandepions.PionsBateauDemandes;
+import javafx.animation.SequentialTransition;
+import javafx.animation.Transition;
+import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.util.Duration;
+
 import java.security.cert.PolicyNode;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -35,12 +43,25 @@ public class VueResultats extends BorderPane {
     private VBox deuxieme;
     private VBox premier;
     private VBox troisieme;
+    Rectangle r2;
+    Rectangle r1;
+    Rectangle r3;
 
     public VueResultats(RailsIHM ihm) {
         this.ihm = ihm;
         bas = new HBox();
         podium = new HBox();
         stats = new VBox();
+
+
+        String imagePath = "images/fond3.png";
+        BackgroundImage backgroundImage = new BackgroundImage(
+                new Image(imagePath),
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER,
+                new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, true, true, true, true)
+        );
+        this.setBackground(new Background(backgroundImage));
 
 
         this.setBottom(bas);
@@ -67,9 +88,9 @@ public class VueResultats extends BorderPane {
         premier = new VBox();
         troisieme = new VBox();
 
-        Rectangle r2 = new Rectangle();
-        Rectangle r1 = new Rectangle();
-        Rectangle r3 = new Rectangle();
+        r2 = new Rectangle();
+        r1 = new Rectangle();
+        r3 = new Rectangle();
 
         r2.setHeight(450);
         r1.setHeight(540);
@@ -81,9 +102,7 @@ public class VueResultats extends BorderPane {
         r1.setFill(Color.GOLD);
         r3.setFill(Color.CHOCOLATE);
 
-        deuxieme.getChildren().add(r2);
-        premier.getChildren().add(r1);
-        troisieme.getChildren().add(r3);
+
 
         deuxieme.setAlignment(Pos.BOTTOM_CENTER);
         premier.setAlignment(Pos.BOTTOM_CENTER);
@@ -98,6 +117,51 @@ public class VueResultats extends BorderPane {
     }
 
     public void creatBindings(){
+
+        Image image1 = new Image("images/podium1.png");
+        Image image2 = new Image("images/podium2.png");
+        Image image3 = new Image("images/podium3.png");
+
+        ImageView deuxiemeImage = new ImageView(image1);
+        ImageView premierImage = new ImageView(image2);
+        ImageView troisiemeImage = new ImageView(image3);
+
+        deuxieme.getChildren().add(deuxiemeImage);
+        premier.getChildren().add(premierImage);
+        troisieme.getChildren().add(troisiemeImage);
+
+        StackPane deuxiemeStack = new StackPane(r2, deuxiemeImage);
+        StackPane premierStack = new StackPane(r1, premierImage);
+        StackPane troisiemeStack = new StackPane(r3, troisiemeImage);
+
+        deuxiemeImage.setLayoutX(r2.getWidth() / 2);
+        premierImage.setLayoutX(r1.getWidth() / 2);
+        troisiemeImage.setLayoutX(r3.getWidth() / 2);
+
+        premier.getChildren().add(premierStack);
+        deuxieme.getChildren().add(deuxiemeStack);
+        troisieme.getChildren().add(troisiemeStack);
+
+
+
+        SequentialTransition animation = new SequentialTransition();
+
+        TranslateTransition troisiemeS = new TranslateTransition(Duration.seconds(1), troisieme);
+        troisiemeS.setFromY(0-troisieme.getHeight()*2);
+        troisiemeS.setToY(getScene().getHeight()-troisieme.getHeight()-this.bas.getHeight());
+
+        TranslateTransition deuxiemeS = new TranslateTransition(Duration.seconds(1), deuxieme);
+        deuxiemeS.setFromY(0-deuxieme.getHeight()*2);
+        deuxiemeS.setToY(getScene().getHeight()-deuxieme.getHeight()-this.bas.getHeight());
+
+
+        TranslateTransition premierS = new TranslateTransition(Duration.seconds(1), premier);
+        premierS.setFromY(0-premier.getHeight()*2);
+        premierS.setToY(getScene().getHeight()-premier.getHeight()-this.bas.getHeight());
+
+        animation.getChildren().addAll(troisiemeS, deuxiemeS, premierS);
+        animation.play();
+
         // classement pour podium
         PriorityQueue<IJoueur> classement = classment();
 
