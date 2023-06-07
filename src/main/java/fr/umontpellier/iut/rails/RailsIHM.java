@@ -82,6 +82,7 @@ public class RailsIHM extends Application {
             this.arreterJeu();
             event.consume();
         });
+        primaryStage.setMaximized(true);
         primaryStage.show();
         finDePartie();
     }

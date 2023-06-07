@@ -1,5 +1,6 @@
 package fr.umontpellier.iut.rails.vues;
 
+import fr.umontpellier.iut.rails.Confetti;
 import fr.umontpellier.iut.rails.IJoueur;
 import fr.umontpellier.iut.rails.RailsIHM;
 import fr.umontpellier.iut.rails.mecanique.Joueur;
@@ -36,6 +37,8 @@ public class VueResultats extends BorderPane {
 
     private RailsIHM ihm;
     private HBox bas;
+    private VBox centerBox;
+    private HBox conf;
     private HBox podium;
     private VBox stats;
     private Button rejouer;
@@ -52,6 +55,10 @@ public class VueResultats extends BorderPane {
         bas = new HBox();
         podium = new HBox();
         stats = new VBox();
+        centerBox = new VBox();
+        conf = new HBox();
+        centerBox.getChildren().add(conf);
+        centerBox.getChildren().add(podium);
 
 
         String imagePath = "images/fond3.png";
@@ -65,7 +72,7 @@ public class VueResultats extends BorderPane {
 
 
         this.setBottom(bas);
-        this.setCenter(podium);
+        this.setCenter(centerBox);
         this.setRight(stats);
 
 
@@ -92,9 +99,9 @@ public class VueResultats extends BorderPane {
         r1 = new Rectangle();
         r3 = new Rectangle();
 
-        r2.setHeight(450);
-        r1.setHeight(540);
-        r3.setHeight(375);
+        r2.setHeight(375);
+        r1.setHeight(450);
+        r3.setHeight(300);
         r2.setWidth(300);
         r1.setWidth(300);
         r3.setWidth(300);
@@ -109,15 +116,6 @@ public class VueResultats extends BorderPane {
         troisieme.setAlignment(Pos.BOTTOM_CENTER);
 
 
-        podium.getChildren().addAll(deuxieme, premier, troisieme);
-        podium.setAlignment(Pos.CENTER);
-
-
-
-    }
-
-    public void creatBindings(){
-
         Image image1 = new Image("images/podium1.png");
         Image image2 = new Image("images/podium2.png");
         Image image3 = new Image("images/podium3.png");
@@ -126,23 +124,23 @@ public class VueResultats extends BorderPane {
         ImageView premierImage = new ImageView(image2);
         ImageView troisiemeImage = new ImageView(image3);
 
-        deuxieme.getChildren().add(deuxiemeImage);
-        premier.getChildren().add(premierImage);
-        troisieme.getChildren().add(troisiemeImage);
 
         StackPane deuxiemeStack = new StackPane(r2, deuxiemeImage);
         StackPane premierStack = new StackPane(r1, premierImage);
         StackPane troisiemeStack = new StackPane(r3, troisiemeImage);
 
-        deuxiemeImage.setLayoutX(r2.getWidth() / 2);
-        premierImage.setLayoutX(r1.getWidth() / 2);
-        troisiemeImage.setLayoutX(r3.getWidth() / 2);
 
         premier.getChildren().add(premierStack);
         deuxieme.getChildren().add(deuxiemeStack);
         troisieme.getChildren().add(troisiemeStack);
 
 
+        podium.getChildren().addAll(deuxieme, premier, troisieme);
+        podium.setAlignment(Pos.CENTER);
+        //Confetti.dropConfetti(conf);
+    }
+
+    public void creatBindings(){
 
         SequentialTransition animation = new SequentialTransition();
 
@@ -170,22 +168,45 @@ public class VueResultats extends BorderPane {
             tousLesjoueurs.add(classement.poll());
         }
 
-        Label premierNom = new Label(tousLesjoueurs.get(0).getNom());
-        premierNom.setFont(new Font("Arial", 30));
-        premier.getChildren().add(0, premierNom);
-        premierNom.setPadding(new Insets(0, 0, 20, 0));
 
-        Label deuxièmeNom = new Label(tousLesjoueurs.get(1).getNom());
-        deuxièmeNom.setFont(new Font("Arial", 30));
-        deuxièmeNom.setPadding(new Insets(0, 0, 20, 0));
-        deuxieme.getChildren().add(0, deuxièmeNom);
+        int space = 10;
+        int taillle = 275;
+        int paddingTexte = 10;
+
+        Image premierImage = new Image("images/cartesWagons/avatar-"+tousLesjoueurs.get(0).getCouleur().toString().toUpperCase()+".png");
+        ImageView img1 = new ImageView(premierImage);
+        img1.setFitHeight(taillle);
+        img1.setPreserveRatio(true);
+        Label premierNom = new Label("Score : " + tousLesjoueurs.get(0).getScore() + "");
+        premierNom.setFont(new Font("Arial", 30));
+        premierNom.setPadding(new Insets(paddingTexte));
+        premier.getChildren().add(0, img1);
+        premier.getChildren().add(1, premierNom);
+        premier.setSpacing(space);
+
+        Image deuxiemeImage = new Image("images/cartesWagons/avatar-"+tousLesjoueurs.get(1).getCouleur().toString().toUpperCase()+".png");
+        ImageView img2 = new ImageView(deuxiemeImage);
+        img2.setFitHeight(taillle);
+        img2.setPreserveRatio(true);
+        Label deuxiemeNom = new Label("Score : " + tousLesjoueurs.get(1).getScore() + "");
+        deuxiemeNom.setFont(new Font("Arial", 30));
+        deuxiemeNom.setPadding(new Insets(paddingTexte));
+        deuxieme.getChildren().add(0, img2);
+        deuxieme.getChildren().add(1, deuxiemeNom);
+        deuxieme.setSpacing(space);
+
 
         if(tousLesjoueurs.size()>2){
-            Label troisiemeNom = new Label(tousLesjoueurs.get(2).getNom());
+            Image troisiemeImage = new Image("images/cartesWagons/avatar-"+tousLesjoueurs.get(2).getCouleur().toString().toUpperCase()+".png");
+            ImageView img3 = new ImageView(troisiemeImage);
+            img3.setFitHeight(taillle);
+            img3.setPreserveRatio(true);
+            Label troisiemeNom = new Label("Score : " + tousLesjoueurs.get(2).getScore() + "");
             troisiemeNom.setFont(new Font("Arial", 30));
-            troisiemeNom.setPadding(new Insets(0, 0, 20, 0));
-            troisieme.getChildren().add(0, troisiemeNom);
-
+            troisiemeNom.setPadding(new Insets(paddingTexte));
+            troisieme.getChildren().add(0, img3);
+            troisieme.getChildren().add(1, troisiemeNom);
+            troisieme.setSpacing(space);
         }
 
 
