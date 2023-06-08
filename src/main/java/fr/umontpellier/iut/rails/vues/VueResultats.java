@@ -303,25 +303,4 @@ public class VueResultats extends BorderPane {
         return button;
     }
 
-
-//    public void creerAnimation(ImageView imageView){
-//        double initialWidth = 275;
-//        double targetWidth = 300;
-//        imageView.setFitWidth(initialWidth);
-//
-//        // Créer la Timeline de l'animation
-//        Timeline timeline = new Timeline();
-//        timeline.setCycleCount(Timeline.INDEFINITE); // Répétition infinie
-//        timeline.setAutoReverse(true); // Inversion automatique
-//
-//        // Ajouter les KeyFrames pour faire grossir et rétrécir la largeur
-//        KeyFrame keyFrame1 = new KeyFrame(Duration.seconds(1), new KeyValue(imageView.fitWidthProperty(), targetWidth, Interpolator.EASE_BOTH));
-//        KeyFrame keyFrame2 = new KeyFrame(Duration.seconds(2), new KeyValue(imageView.fitWidthProperty(), initialWidth, Interpolator.EASE_BOTH));
-//        timeline.getKeyFrames().addAll(keyFrame1, keyFrame2);
-//
-//        // Démarrer l'animation
-//        timeline.play();
-//    }
-
-
 }
