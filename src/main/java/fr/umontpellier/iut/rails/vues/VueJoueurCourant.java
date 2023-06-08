@@ -49,7 +49,7 @@ public class VueJoueurCourant extends ScrollPane {
         label.setFont(new Font("Arial", 30));
         profil.getChildren().add(label);
         //this.setSpacing(20);
-        this.setPadding(new Insets(0, 10, 0, 5));
+        this.setPadding(new Insets(0, 10, 0, 10));
         profil.setAlignment(Pos.CENTER_LEFT);
 
         Color backgroundColor = Color.web(getCouleur(jeu.joueurCourantProperty().get()));
