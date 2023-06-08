@@ -5,9 +5,7 @@ import fr.umontpellier.iut.rails.IJoueur;
 import fr.umontpellier.iut.rails.RailsIHM;
 import fr.umontpellier.iut.rails.mecanique.Joueur;
 import fr.umontpellier.iut.rails.mecanique.etatsJoueur.demandepions.PionsBateauDemandes;
-import javafx.animation.SequentialTransition;
-import javafx.animation.Transition;
-import javafx.animation.TranslateTransition;
+import javafx.animation.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -63,14 +61,7 @@ public class VueResultats extends BorderPane {
         tout = new ScrollPane();
 
 
-        String imagePath = "images/fond3.png";
-        BackgroundImage backgroundImage = new BackgroundImage(
-                new Image(imagePath),
-                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.CENTER,
-                new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, true, true, true, true)
-        );
-        this.setBackground(new Background(backgroundImage));
+        this.setStyle("-fx-background-color: #383535;");
 
 
         this.setBottom(bas);
@@ -195,6 +186,7 @@ public class VueResultats extends BorderPane {
         Label premierNom = new Label("Score : " + tousLesjoueurs.get(0).getScore() + "");
         premierNom.setFont(new Font("Arial", 30));
         premierNom.setPadding(new Insets(paddingTexte));
+        premierNom.setTextFill(Color.WHITE);
         premier.getChildren().add(0, img1);
         premier.getChildren().add(1, premierNom);
         premier.setSpacing(space);
@@ -206,6 +198,7 @@ public class VueResultats extends BorderPane {
         Label deuxiemeNom = new Label("Score : " + tousLesjoueurs.get(1).getScore() + "");
         deuxiemeNom.setFont(new Font("Arial", 30));
         deuxiemeNom.setPadding(new Insets(paddingTexte));
+        deuxiemeNom.setTextFill(Color.WHITE);
         deuxieme.getChildren().add(0, img2);
         deuxieme.getChildren().add(1, deuxiemeNom);
         deuxieme.setSpacing(space);
@@ -219,6 +212,7 @@ public class VueResultats extends BorderPane {
             Label troisiemeNom = new Label("Score : " + tousLesjoueurs.get(2).getScore() + "");
             troisiemeNom.setFont(new Font("Arial", 30));
             troisiemeNom.setPadding(new Insets(paddingTexte));
+            troisiemeNom.setTextFill(Color.WHITE);
             troisieme.getChildren().add(0, img3);
             troisieme.getChildren().add(1, troisiemeNom);
             troisieme.setSpacing(space);
@@ -228,10 +222,10 @@ public class VueResultats extends BorderPane {
         // création du classement
         Label anonce = new Label("Classment");
         stats1.getChildren().add(anonce);
-        stats1.setStyle("-fx-border-width: 3px; -fx-border-color: black; -fx-background-color: WHITE");
+        stats1.setStyle("-fx-border-width: 2px; -fx-border-color: black;  -fx-background-color: WHITE");
 
         anonce.setStyle("-fx-background-color: WHITE");
-        anonce.setStyle("-fx-font-size: 50px; -fx-border-width: 2px; -fx-border-color: black; -fx-padding: 30px;");
+        anonce.setStyle("-fx-font-size: 50px; -fx-border-width: 0px 0px 2px 0px; -fx-border-color: black; -fx-padding: 30px;");
         anonce.setMinWidth(stats1.computeAreaInScreen());
 
 
@@ -246,7 +240,7 @@ public class VueResultats extends BorderPane {
 
             VBox num = new VBox();
             num.setAlignment(Pos.CENTER);
-            num.setStyle("-fx-font-size: 30px; -fx-border-width: 0px 2px 0px 0px; -fx-border-color: black; -fx-padding: 30px 15px");
+            num.setStyle("-fx-font-size: 30px; -fx-border-width: 0px 2px 0px 0px; -fx-border-color: black; -fx-padding: 30px 15px; -fx-background-color: WHITE");
             Label numero = new Label(""+compteur);
             num.setMinHeight(numeroEtJoeur.getMinHeight());
             num.getChildren().add(numero);
@@ -304,10 +298,30 @@ public class VueResultats extends BorderPane {
         Button button = new Button(text);
         button.setStyle("-fx-font-size: 40px; -fx-text-fill: white;");
         button.setBackground(new Background(new BackgroundFill(backgroundColor, new CornerRadii(5), Insets.EMPTY)));
-        button.setPadding(new Insets(15, 50, 15, 50));
+        button.setPadding(new Insets(15, 200, 15, 200));
 
         return button;
     }
+
+
+//    public void creerAnimation(ImageView imageView){
+//        double initialWidth = 275;
+//        double targetWidth = 300;
+//        imageView.setFitWidth(initialWidth);
+//
+//        // Créer la Timeline de l'animation
+//        Timeline timeline = new Timeline();
+//        timeline.setCycleCount(Timeline.INDEFINITE); // Répétition infinie
+//        timeline.setAutoReverse(true); // Inversion automatique
+//
+//        // Ajouter les KeyFrames pour faire grossir et rétrécir la largeur
+//        KeyFrame keyFrame1 = new KeyFrame(Duration.seconds(1), new KeyValue(imageView.fitWidthProperty(), targetWidth, Interpolator.EASE_BOTH));
+//        KeyFrame keyFrame2 = new KeyFrame(Duration.seconds(2), new KeyValue(imageView.fitWidthProperty(), initialWidth, Interpolator.EASE_BOTH));
+//        timeline.getKeyFrames().addAll(keyFrame1, keyFrame2);
+//
+//        // Démarrer l'animation
+//        timeline.play();
+//    }
 
 
 }
