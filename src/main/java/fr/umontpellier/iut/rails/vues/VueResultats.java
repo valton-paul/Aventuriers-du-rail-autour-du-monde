@@ -37,8 +37,6 @@ public class VueResultats extends BorderPane {
 
     private RailsIHM ihm;
     private HBox bas;
-    private VBox centerBox;
-    private HBox conf;
     private HBox podium;
     private VBox stats;
     private Button rejouer;
@@ -55,10 +53,6 @@ public class VueResultats extends BorderPane {
         bas = new HBox();
         podium = new HBox();
         stats = new VBox();
-        centerBox = new VBox();
-        conf = new HBox();
-        centerBox.getChildren().add(conf);
-        centerBox.getChildren().add(podium);
 
 
         String imagePath = "images/fond3.png";
@@ -72,7 +66,7 @@ public class VueResultats extends BorderPane {
 
 
         this.setBottom(bas);
-        this.setCenter(centerBox);
+        this.setCenter(podium);
         this.setRight(stats);
 
 
@@ -137,7 +131,6 @@ public class VueResultats extends BorderPane {
 
         podium.getChildren().addAll(deuxieme, premier, troisieme);
         podium.setAlignment(Pos.CENTER);
-        //Confetti.dropConfetti(conf);
     }
 
     public void creatBindings(){
