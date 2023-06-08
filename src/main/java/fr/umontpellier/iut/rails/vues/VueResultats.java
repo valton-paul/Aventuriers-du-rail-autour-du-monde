@@ -8,11 +8,14 @@ import fr.umontpellier.iut.rails.mecanique.etatsJoueur.demandepions.PionsBateauD
 import javafx.animation.SequentialTransition;
 import javafx.animation.Transition;
 import javafx.animation.TranslateTransition;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -21,6 +24,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.security.cert.PolicyNode;
@@ -38,7 +42,9 @@ public class VueResultats extends BorderPane {
     private RailsIHM ihm;
     private HBox bas;
     private HBox podium;
-    private VBox stats;
+    private VBox stats1;
+    private VBox stats2;
+    private ScrollPane tout;
     private Button rejouer;
     private Button quitter;
     private VBox deuxieme;
@@ -52,7 +58,9 @@ public class VueResultats extends BorderPane {
         this.ihm = ihm;
         bas = new HBox();
         podium = new HBox();
-        stats = new VBox();
+        stats2 = new VBox();
+        stats1 = new VBox();
+        tout = new ScrollPane();
 
 
         String imagePath = "images/fond3.png";
@@ -67,12 +75,26 @@ public class VueResultats extends BorderPane {
 
         this.setBottom(bas);
         this.setCenter(podium);
-        this.setRight(stats);
+        this.setRight(stats1);
 
 
 
         quitter = createJoliButton("Rejouer", Color.GREEN);
+        quitter.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Stage stage = (Stage) quitter.getScene().getWindow(); // Obtient la référence à la fenêtre courante
+                stage.close(); // Ferme la fenêtre courante
+                ihm.debuterJeu();
+            }
+        });
         rejouer = createJoliButton("Quitter", Color.RED);
+        rejouer.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                ihm.arreterJeu();
+            }
+        });
         bas.getChildren().addAll(quitter, rejouer);
 
         bas.setSpacing(300);
@@ -205,42 +227,60 @@ public class VueResultats extends BorderPane {
 
         // création du classement
         Label anonce = new Label("Classment");
-        anonce.setMinWidth(stats.computeAreaInScreen());
-        stats.getChildren().add(anonce);
-        anonce.setStyle("-fx-font-size: 50px; -fx-border-width: 5px; -fx-border-color: black");
-        stats.setStyle("-fx-border-width: 5px; -fx-border-color: black;");
+        stats1.getChildren().add(anonce);
+        stats1.setStyle("-fx-border-width: 3px; -fx-border-color: black; -fx-background-color: WHITE");
 
+        anonce.setStyle("-fx-background-color: WHITE");
+        anonce.setStyle("-fx-font-size: 50px; -fx-border-width: 2px; -fx-border-color: black; -fx-padding: 30px;");
+        anonce.setMinWidth(stats1.computeAreaInScreen());
+
+
+        ScrollPane tout = new ScrollPane();
+        tout.setContent(stats2);
+
+        stats1.getChildren().add(tout);
 
         int compteur = 1;
         for(IJoueur joueurCourant : tousLesjoueurs){
             HBox numeroEtJoeur = new HBox();
-            numeroEtJoeur.setMinHeight(stats.getHeight()/5);
 
+            VBox num = new VBox();
+            num.setAlignment(Pos.CENTER);
+            num.setStyle("-fx-font-size: 30px; -fx-border-width: 0px 2px 0px 0px; -fx-border-color: black; -fx-padding: 30px 15px");
             Label numero = new Label(""+compteur);
-            numero.setStyle("-fx-font-size: 30px; -fx-border-width: 2px; -fx-border-color: black; -fx-padding: 10px");
-            numero.setMinHeight(numeroEtJoeur.getHeight());
+            num.setMinHeight(numeroEtJoeur.getMinHeight());
+            num.getChildren().add(numero);
 
             VBox les2 = new VBox();
+
+            HBox visageEtNom = new HBox();
+            Image troisiemeImage = new Image("images/cartesWagons/avatar-"+joueurCourant.getCouleur().toString().toUpperCase()+".png");
+            ImageView img = new ImageView(troisiemeImage);
+            img.setFitHeight(75);
+            img.setPreserveRatio(true);
             Label nom = new Label(joueurCourant.getNom() + " | " + joueurCourant.getScore());
-            nom.setStyle("-fx-font-size: 25px; -fx-padding: 15px");
-            les2.getChildren().add(nom);
+            nom.setStyle("-fx-font-size: 30px; -fx-padding: 30px 0px 30px 15px");
+            visageEtNom.getChildren().addAll(img, nom);
+            les2.getChildren().add(visageEtNom);
 
             Label port = new Label("Ports : " + joueurCourant.getNbPorts());
             Label nbBateaux  = new Label("Pions Bateau : " + joueurCourant.getNbPionsBateau());
             Label nbWagons = new Label("Pions Bateau : " + joueurCourant.getNbPionsWagon());
+            Label nbRoute = new Label("Nombre de ports : " + joueurCourant.getNbPorts());
 
 
-            port.setStyle("-fx-font-size: 10px;  -fx-padding: 3px");
-            nbWagons.setStyle("-fx-font-size: 10px;  -fx-padding: 3px");
-            nbBateaux.setStyle("-fx-font-size: 10px;  -fx-padding: 3px");
+            port.setStyle("-fx-font-size: 15px;  -fx-padding: 5px");
+            nbWagons.setStyle("-fx-font-size: 15px;  -fx-padding: 5px");
+            nbBateaux.setStyle("-fx-font-size: 15px;  -fx-padding: 5px");
             les2.getChildren().addAll(port, nbWagons, nbBateaux);
 
-            numeroEtJoeur.getChildren().addAll(numero, les2);
+            numeroEtJoeur.getChildren().addAll(num, les2);
+            numeroEtJoeur.setStyle("-fx-border-width: 0px 0px 2px 0px; -fx-border-color: black;");
 
-            stats.getChildren().add(numeroEtJoeur);
 
-            numeroEtJoeur.setStyle("-fx-border-width: 2px; -fx-border-color: black;");
 
+
+            stats2.getChildren().add(numeroEtJoeur);
             compteur++;
         }
 
@@ -264,7 +304,7 @@ public class VueResultats extends BorderPane {
         Button button = new Button(text);
         button.setStyle("-fx-font-size: 40px; -fx-text-fill: white;");
         button.setBackground(new Background(new BackgroundFill(backgroundColor, new CornerRadii(5), Insets.EMPTY)));
-        button.setPadding(new Insets(10, 20, 10, 20));
+        button.setPadding(new Insets(15, 50, 15, 50));
 
         return button;
     }

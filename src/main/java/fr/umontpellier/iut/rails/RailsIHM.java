@@ -45,6 +45,8 @@ public class RailsIHM extends Application {
         }
     }
 
+
+
     public void demarrerPartie() {
         List<String> nomsJoueurs;
         if (avecVueChoixJoueurs)
