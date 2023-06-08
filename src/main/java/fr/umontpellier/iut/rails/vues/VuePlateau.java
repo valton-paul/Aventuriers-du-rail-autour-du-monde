@@ -22,6 +22,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
@@ -81,49 +82,35 @@ public class VuePlateau extends Pane {
     };
 
     public void creerBindings() {
- ajouterVilles();
+        ajouterVilles();
         ajouterPorts();
         ajouterRoutes();
         bindRedimensionEtCentragePlateau();
-        instruct.setLayoutX(getScene().getWidth()/3.5);
+        instruct.setLayoutX(getScene().getWidth() / 3.5);
         instruct.setLayoutY(40);
 
-        for(IJoueur j : ((VueDuJeu)getScene().getRoot()).getJeu().getJoueurs())
-        {
+        for (IJoueur j : ((VueDuJeu) getScene().getRoot()).getJeu().getJoueurs()) {
             j.cartesTransportPoseesProperty().addListener(new ListChangeListener<CarteTransport>() {
                 @Override
                 public void onChanged(Change<? extends CarteTransport> change) {
                     change.next();
-                    if(change.wasRemoved()) {
-                        HashMap<Node, Shape> aChanger = new HashMap<>();
+                    if (change.wasRemoved()) {
                         ArrayList<ImageView> ajout = new ArrayList<>();
                         for (Node node : getChildren()) {
                             if (node instanceof Rectangle rect) {
                                 if (rect.getId().equals(dernierNodeAppuyer.getId())) {
                                     rect.setOpacity(1);
-                                    rect.setFill(Color.web(VueAutresJoueurs.getCouleur(j)));
-//                                    Image img = new Image("images/wagons/image-wagon-" + ((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().get().getCouleur().toString().toUpperCase() + ".png");
-//                                    //aChanger.put(new ImageView(img), rect);
-//                                    for(DonneesGraphiques.DonneesSegments position : DonneesGraphiques.routes.get(rect.getId()))
-//                                    {
-//                                        ImageView jetons = new ImageView(img);
-//                                        ajout.add(jetons);
-//                                        jetons.setFitWidth(46);
-//                                        jetons.setFitHeight(14);
-//                                        jetons.setX(position.getXHautGauche());
-//                                        jetons.setY(position.getYHautGauche());
-//                                        jetons.setRotate(position.getAngle());
-//                                    }
+                                    Image img = new Image("images/wagons/image-wagon-" + ((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().get().getCouleur().toString().toUpperCase() + ".png");
+                                    rect.setFill(new ImagePattern(img));
                                 }
                             } else if (node instanceof Circle circle) {
-                                if (circle.getId().equals(dernierNodeAppuyer.getId()))
-                                {
+                                if (circle.getId().equals(dernierNodeAppuyer.getId())) {
                                     circle.setOpacity(1);
                                     circle.setFill(Color.web(VueAutresJoueurs.getCouleur(j)));
                                 }
                             }
                         }
-//                        getChildren().addAll(ajout);
+                        getChildren().addAll(ajout);
 //                        for (HashMap.Entry<Node, Shape> entry : aChanger.entrySet()) {
 //                            entry.getKey().setLayoutX(entry.getValue().getBoundsInLocal().getCenterX());
 //                            entry.getKey().setLayoutX(entry.getValue().getBoundsInLocal().getCenterY());
@@ -135,8 +122,7 @@ public class VuePlateau extends Pane {
         }
 
 
-
-        ((VueDuJeu)getScene().getRoot()).getJeu().instructionProperty().addListener(new ChangeListener<String>() {
+        ((VueDuJeu) getScene().getRoot()).getJeu().instructionProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 instructions.setText(t1);
@@ -146,190 +132,189 @@ public class VuePlateau extends Pane {
                 transitions.getChildren().addAll(aller, retour);
 
                 aller.setFromX(0);
-                aller.setToX(-3 * getScene().getWidth()/3.5);
+                aller.setToX(-3 * getScene().getWidth() / 3.5);
 
 
-                retour.setFromX(-3 * getScene().getWidth()/3.5);
-                retour.setToX(-t1.length()*4.5);
+                retour.setFromX(-3 * getScene().getWidth() / 3.5);
+                retour.setToX(-t1.length() * 4.5);
                 transitions.play();
             }
         });
 
     }
 
-            private void ajouterPorts() {
-                for (String nomPort : DonneesGraphiques.ports.keySet()) {
-                    DonneesGraphiques.DonneesCerclesPorts positionPortSurPlateau = DonneesGraphiques.ports.get(nomPort);
-                    Circle cerclePort = new Circle(positionPortSurPlateau.centreX(), positionPortSurPlateau.centreY(), DonneesGraphiques.rayonInitial);
-                    cerclePort.setId(nomPort);
-                    cerclePort.setOpacity(0);
-                    getChildren().add(cerclePort);
-                    bindCerclePortAuPlateau(positionPortSurPlateau, cerclePort);
-                    cerclePort.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                        @Override
+    private void ajouterPorts() {
+        for (String nomPort : DonneesGraphiques.ports.keySet()) {
+            DonneesGraphiques.DonneesCerclesPorts positionPortSurPlateau = DonneesGraphiques.ports.get(nomPort);
+            Circle cerclePort = new Circle(positionPortSurPlateau.centreX(), positionPortSurPlateau.centreY(), DonneesGraphiques.rayonInitial);
+            cerclePort.setId(nomPort);
+            cerclePort.setOpacity(0);
+            getChildren().add(cerclePort);
+            bindCerclePortAuPlateau(positionPortSurPlateau, cerclePort);
+            cerclePort.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
 
-                        public void handle(MouseEvent mouseEvent) {
-                            ((VueDuJeu) getScene().getRoot()).getJeu().unPortAEteChoisi(nomPort);
-                            dernierNodeAppuyer = cerclePort;
-                        }
-                    });
+                public void handle(MouseEvent mouseEvent) {
+                    ((VueDuJeu) getScene().getRoot()).getJeu().unPortAEteChoisi(nomPort);
+                    dernierNodeAppuyer = cerclePort;
                 }
-            }
+            });
+        }
+    }
 
-            private void ajouterRoutes() {
-                List<? extends IRoute> listeRoutes = ((VueDuJeu) getScene().getRoot()).getJeu().getRoutes();
-                for (String nomRoute : DonneesGraphiques.routes.keySet()) {
-                    ArrayList<DonneesGraphiques.DonneesSegments> segmentsRoute = DonneesGraphiques.routes.get(nomRoute);
-                    IRoute route = listeRoutes.stream().filter(r -> r.getNom().equals(nomRoute)).findAny().orElse(null);
-                    for (DonneesGraphiques.DonneesSegments unSegment : segmentsRoute) {
-                        Rectangle rectangleSegment = new Rectangle(unSegment.getXHautGauche(), unSegment.getYHautGauche(), DonneesGraphiques.largeurRectangle, DonneesGraphiques.hauteurRectangle);
-                        rectangleSegment.setId(nomRoute);
-                        rectangleSegment.setRotate(unSegment.getAngle());
-                        rectangleSegment.setOpacity(0);
-                        getChildren().add(rectangleSegment);
-                        bindRectangle(rectangleSegment, unSegment.getXHautGauche(), unSegment.getYHautGauche());
-                        rectangleSegment.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                            @Override
-                            public void handle(MouseEvent mouseEvent) {
-                                ((VueDuJeu) getScene().getRoot()).getJeu().uneRouteAEteChoisie(nomRoute);
-                                dernierNodeAppuyer = rectangleSegment;
-                            }
-                        });
-                    }
-                }
-            }
-
-            private void bindRedimensionEtCentragePlateau() {
-                mapMonde.fitWidthProperty().bind(widthProperty());
-                mapMonde.fitHeightProperty().bind(heightProperty());
-                mapMonde.layoutXProperty().bind(new DoubleBinding() { // Pour maintenir le plateau au centre
-                    {
-                        super.bind(widthProperty(), heightProperty());
-                    }
-
+    private void ajouterRoutes() {
+        List<? extends IRoute> listeRoutes = ((VueDuJeu) getScene().getRoot()).getJeu().getRoutes();
+        for (String nomRoute : DonneesGraphiques.routes.keySet()) {
+            ArrayList<DonneesGraphiques.DonneesSegments> segmentsRoute = DonneesGraphiques.routes.get(nomRoute);
+            IRoute route = listeRoutes.stream().filter(r -> r.getNom().equals(nomRoute)).findAny().orElse(null);
+            for (DonneesGraphiques.DonneesSegments unSegment : segmentsRoute) {
+                Rectangle rectangleSegment = new Rectangle(unSegment.getXHautGauche(), unSegment.getYHautGauche(), DonneesGraphiques.largeurRectangle, DonneesGraphiques.hauteurRectangle);
+                rectangleSegment.setId(nomRoute);
+                rectangleSegment.setRotate(unSegment.getAngle());
+                rectangleSegment.setOpacity(0);
+                getChildren().add(rectangleSegment);
+                bindRectangle(rectangleSegment, unSegment.getXHautGauche(), unSegment.getYHautGauche());
+                rectangleSegment.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
-                    protected double computeValue() {
-                        double imageViewWidth = mapMonde.getLayoutBounds().getWidth();
-                        return (getWidth() - imageViewWidth) / 2;
+                    public void handle(MouseEvent mouseEvent) {
+                        ((VueDuJeu) getScene().getRoot()).getJeu().uneRouteAEteChoisie(nomRoute);
+                        dernierNodeAppuyer = rectangleSegment;
                     }
                 });
             }
+        }
+    }
 
-            private void bindCerclePortAuPlateau(DonneesGraphiques.DonneesCerclesPorts port, Circle cerclePort) {
-                cerclePort.centerXProperty().bind(new DoubleBinding() {
-                    {
-                        super.bind(mapMonde.fitWidthProperty(), mapMonde.fitHeightProperty());
-                    }
-
-                    @Override
-                    protected double computeValue() {
-                        return mapMonde.getLayoutX() + port.centreX() * mapMonde.getLayoutBounds().getWidth() / DonneesGraphiques.largeurInitialePlateau;
-                    }
-                });
-                cerclePort.centerYProperty().bind(new DoubleBinding() {
-                    {
-                        super.bind(mapMonde.fitWidthProperty(), mapMonde.fitHeightProperty());
-                    }
-
-                    @Override
-                    protected double computeValue() {
-                        return mapMonde.getLayoutY() + port.centreY() * mapMonde.getLayoutBounds().getHeight() / DonneesGraphiques.hauteurInitialePlateau;
-                    }
-                });
-                cerclePort.radiusProperty().bind(new DoubleBinding() {
-                    {
-                        super.bind(mapMonde.fitWidthProperty(), mapMonde.fitHeightProperty());
-                    }
-
-                    @Override
-                    protected double computeValue() {
-                        return DonneesGraphiques.rayonInitial * mapMonde.getLayoutBounds().getWidth() / DonneesGraphiques.largeurInitialePlateau;
-                    }
-                });
+    private void bindRedimensionEtCentragePlateau() {
+        mapMonde.fitWidthProperty().bind(widthProperty());
+        mapMonde.fitHeightProperty().bind(heightProperty());
+        mapMonde.layoutXProperty().bind(new DoubleBinding() { // Pour maintenir le plateau au centre
+            {
+                super.bind(widthProperty(), heightProperty());
             }
 
-            private void bindRectangle(Rectangle rect, double layoutX, double layoutY) {
-                rect.widthProperty().bind(new DoubleBinding() {
-                    {
-                        super.bind(mapMonde.fitWidthProperty(), mapMonde.fitHeightProperty());
-                    }
-
-                    @Override
-                    protected double computeValue() {
-                        return DonneesGraphiques.largeurRectangle * mapMonde.getLayoutBounds().getWidth() / DonneesGraphiques.largeurInitialePlateau;
-                    }
-                });
-                rect.heightProperty().bind(new DoubleBinding() {
-                    {
-                        super.bind(mapMonde.fitWidthProperty(), mapMonde.fitHeightProperty());
-                    }
-
-                    @Override
-                    protected double computeValue() {
-                        return DonneesGraphiques.hauteurRectangle * mapMonde.getLayoutBounds().getWidth() / DonneesGraphiques.largeurInitialePlateau;
-                    }
-                });
-                rect.layoutXProperty().bind(new DoubleBinding() {
-                    {
-                        super.bind(mapMonde.fitWidthProperty(), mapMonde.fitHeightProperty(), mapMonde.xProperty());
-                    }
-
-                    @Override
-                    protected double computeValue() {
-                        return mapMonde.getLayoutX() + layoutX * mapMonde.getLayoutBounds().getWidth() / DonneesGraphiques.largeurInitialePlateau;
-                    }
-                });
-                rect.xProperty().bind(new DoubleBinding() {
-                    {
-                        super.bind(mapMonde.fitWidthProperty(), mapMonde.fitHeightProperty(), mapMonde.xProperty());
-                    }
-
-                    @Override
-                    protected double computeValue() {
-                        return mapMonde.getLayoutBounds().getWidth() / DonneesGraphiques.largeurInitialePlateau;
-                    }
-                });
-                rect.layoutYProperty().bind(new DoubleBinding() {
-                    {
-                        super.bind(mapMonde.fitWidthProperty(), mapMonde.fitHeightProperty());
-                    }
-
-                    @Override
-                    protected double computeValue() {
-                        return layoutY * mapMonde.getLayoutBounds().getHeight() / DonneesGraphiques.hauteurInitialePlateau;
-                    }
-                });
-                rect.yProperty().bind(new DoubleBinding() {
-                    {
-                        super.bind(mapMonde.fitWidthProperty(), mapMonde.fitHeightProperty());
-                    }
-
-                    @Override
-                    protected double computeValue() {
-                        return mapMonde.getLayoutBounds().getHeight() / DonneesGraphiques.hauteurInitialePlateau;
-                    }
-                });
-            }
-
-
-
-private void ajouterVilles() {
-    for (String nomVille : DonneesGraphiques.villes.keySet()) {
-        DonneesGraphiques.DonneesCerclesPorts positionVilleSurPlateau = DonneesGraphiques.villes.get(nomVille);
-        Circle cercleVille = new Circle(positionVilleSurPlateau.centreX(), positionVilleSurPlateau.centreY(), DonneesGraphiques.rayonInitial);
-        cercleVille.setId(nomVille);
-        getChildren().add(cercleVille);
-        bindCerclePortAuPlateau(positionVilleSurPlateau, cercleVille);
-        cercleVille.setOnMouseClicked(choixPort);
-        cercleVille.setOpacity(0);
-        cercleVille.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
-
-            public void handle(MouseEvent mouseEvent) {
-                ((VueDuJeu) getScene().getRoot()).getJeu().unPortAEteChoisi(nomVille);
-                dernierNodeAppuyer = cercleVille;
+            protected double computeValue() {
+                double imageViewWidth = mapMonde.getLayoutBounds().getWidth();
+                return (getWidth() - imageViewWidth) / 2;
             }
         });
     }
-}
+
+    private void bindCerclePortAuPlateau(DonneesGraphiques.DonneesCerclesPorts port, Circle cerclePort) {
+        cerclePort.centerXProperty().bind(new DoubleBinding() {
+            {
+                super.bind(mapMonde.fitWidthProperty(), mapMonde.fitHeightProperty());
+            }
+
+            @Override
+            protected double computeValue() {
+                return mapMonde.getLayoutX() + port.centreX() * mapMonde.getLayoutBounds().getWidth() / DonneesGraphiques.largeurInitialePlateau;
+            }
+        });
+        cerclePort.centerYProperty().bind(new DoubleBinding() {
+            {
+                super.bind(mapMonde.fitWidthProperty(), mapMonde.fitHeightProperty());
+            }
+
+            @Override
+            protected double computeValue() {
+                return mapMonde.getLayoutY() + port.centreY() * mapMonde.getLayoutBounds().getHeight() / DonneesGraphiques.hauteurInitialePlateau;
+            }
+        });
+        cerclePort.radiusProperty().bind(new DoubleBinding() {
+            {
+                super.bind(mapMonde.fitWidthProperty(), mapMonde.fitHeightProperty());
+            }
+
+            @Override
+            protected double computeValue() {
+                return DonneesGraphiques.rayonInitial * mapMonde.getLayoutBounds().getWidth() / DonneesGraphiques.largeurInitialePlateau;
+            }
+        });
+    }
+
+    private void bindRectangle(Rectangle rect, double layoutX, double layoutY) {
+        rect.widthProperty().bind(new DoubleBinding() {
+            {
+                super.bind(mapMonde.fitWidthProperty(), mapMonde.fitHeightProperty());
+            }
+
+            @Override
+            protected double computeValue() {
+                return DonneesGraphiques.largeurRectangle * mapMonde.getLayoutBounds().getWidth() / DonneesGraphiques.largeurInitialePlateau;
+            }
+        });
+        rect.heightProperty().bind(new DoubleBinding() {
+            {
+                super.bind(mapMonde.fitWidthProperty(), mapMonde.fitHeightProperty());
+            }
+
+            @Override
+            protected double computeValue() {
+                return DonneesGraphiques.hauteurRectangle * mapMonde.getLayoutBounds().getWidth() / DonneesGraphiques.largeurInitialePlateau;
+            }
+        });
+        rect.layoutXProperty().bind(new DoubleBinding() {
+            {
+                super.bind(mapMonde.fitWidthProperty(), mapMonde.fitHeightProperty(), mapMonde.xProperty());
+            }
+
+            @Override
+            protected double computeValue() {
+                return mapMonde.getLayoutX() + layoutX * mapMonde.getLayoutBounds().getWidth() / DonneesGraphiques.largeurInitialePlateau;
+            }
+        });
+        rect.xProperty().bind(new DoubleBinding() {
+            {
+                super.bind(mapMonde.fitWidthProperty(), mapMonde.fitHeightProperty(), mapMonde.xProperty());
+            }
+
+            @Override
+            protected double computeValue() {
+                return mapMonde.getLayoutBounds().getWidth() / DonneesGraphiques.largeurInitialePlateau;
+            }
+        });
+        rect.layoutYProperty().bind(new DoubleBinding() {
+            {
+                super.bind(mapMonde.fitWidthProperty(), mapMonde.fitHeightProperty());
+            }
+
+            @Override
+            protected double computeValue() {
+                return layoutY * mapMonde.getLayoutBounds().getHeight() / DonneesGraphiques.hauteurInitialePlateau;
+            }
+        });
+        rect.yProperty().bind(new DoubleBinding() {
+            {
+                super.bind(mapMonde.fitWidthProperty(), mapMonde.fitHeightProperty());
+            }
+
+            @Override
+            protected double computeValue() {
+                return mapMonde.getLayoutBounds().getHeight() / DonneesGraphiques.hauteurInitialePlateau;
+            }
+        });
+    }
+
+
+    private void ajouterVilles() {
+        for (String nomVille : DonneesGraphiques.villes.keySet()) {
+            DonneesGraphiques.DonneesCerclesPorts positionVilleSurPlateau = DonneesGraphiques.villes.get(nomVille);
+            Circle cercleVille = new Circle(positionVilleSurPlateau.centreX(), positionVilleSurPlateau.centreY(), DonneesGraphiques.rayonInitial);
+            cercleVille.setId(nomVille);
+            getChildren().add(cercleVille);
+            bindCerclePortAuPlateau(positionVilleSurPlateau, cercleVille);
+            cercleVille.setOnMouseClicked(choixPort);
+            cercleVille.setOpacity(0);
+            cercleVille.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+
+                public void handle(MouseEvent mouseEvent) {
+                    ((VueDuJeu) getScene().getRoot()).getJeu().unPortAEteChoisi(nomVille);
+                    dernierNodeAppuyer = cercleVille;
+                }
+            });
+        }
+    }
 }
