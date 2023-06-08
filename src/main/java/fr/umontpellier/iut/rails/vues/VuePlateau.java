@@ -134,24 +134,23 @@ public class VuePlateau extends Pane {
             });
         }
 
-        TranslateTransition aller = new TranslateTransition(Duration.seconds(.25), instruct);
-        TranslateTransition retour = new TranslateTransition(Duration.seconds(.24), instruct);
-        SequentialTransition transitions = new SequentialTransition();
-        transitions.getChildren().addAll(aller, retour);
 
-        aller.setFromX(0);
-        aller.setToX(-3 * getScene().getWidth()/3.5);
-        //aller.setNode(null);
-
-
-        retour.setFromX(-3 * getScene().getWidth()/3.5);
-        retour.setToX(0);
-        //aller.setNode(instruct);
 
         ((VueDuJeu)getScene().getRoot()).getJeu().instructionProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 instructions.setText(t1);
+                TranslateTransition aller = new TranslateTransition(Duration.seconds(.25), instruct);
+                TranslateTransition retour = new TranslateTransition(Duration.seconds(.24), instruct);
+                SequentialTransition transitions = new SequentialTransition();
+                transitions.getChildren().addAll(aller, retour);
+
+                aller.setFromX(0);
+                aller.setToX(-3 * getScene().getWidth()/3.5);
+
+
+                retour.setFromX(-3 * getScene().getWidth()/3.5);
+                retour.setToX(-t1.length()*4.5);
                 transitions.play();
             }
         });
@@ -322,6 +321,15 @@ private void ajouterVilles() {
         getChildren().add(cercleVille);
         bindCerclePortAuPlateau(positionVilleSurPlateau, cercleVille);
         cercleVille.setOnMouseClicked(choixPort);
+        cercleVille.setOpacity(0);
+        cercleVille.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+
+            public void handle(MouseEvent mouseEvent) {
+                ((VueDuJeu) getScene().getRoot()).getJeu().unPortAEteChoisi(nomVille);
+                dernierNodeAppuyer = cercleVille;
+            }
+        });
     }
 }
 }

@@ -432,6 +432,11 @@ public class VueChoixJoueurs extends Stage {
         popup.initOwner(this);
         HBox imageDispo = new HBox();
         imageDispo.setSpacing(25);
+        VBox principal = new VBox();
+        Label label = new Label("Choisissez une couleur");
+        label.setFont(new Font("Arial", 30));
+        principal.setAlignment(Pos.CENTER);
+        principal.getChildren().addAll(label, imageDispo);
 
         for(int i = 0; i < visages.size(); i++)
         {
@@ -482,7 +487,7 @@ public class VueChoixJoueurs extends Stage {
                 });
             }
         }
-        popup.setScene(new Scene(imageDispo));
+        popup.setScene(new Scene(principal));
         popup.showAndWait();
     }
 }

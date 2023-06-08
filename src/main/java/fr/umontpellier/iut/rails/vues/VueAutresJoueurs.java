@@ -1,11 +1,15 @@
 package fr.umontpellier.iut.rails.vues;
 
 
+import fr.umontpellier.iut.rails.IDestination;
 import fr.umontpellier.iut.rails.IJeu;
 import fr.umontpellier.iut.rails.IJoueur;
 import fr.umontpellier.iut.rails.mecanique.Joueur;
+import javafx.animation.SequentialTransition;
+import javafx.animation.TranslateTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -16,12 +20,14 @@ import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.ColorInput;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,6 +45,7 @@ public class VueAutresJoueurs extends VBox {
     public VueAutresJoueurs()
     {
         this.setSpacing(20);
+        this.setPadding(new Insets(0, 10 ,0 ,10));
     }
 
     public static void setImages(HashMap<String, String> images)
@@ -102,9 +109,31 @@ public class VueAutresJoueurs extends VBox {
             Label pionsWagon = new Label("Pions wagons : "+j.getNbPionsWagon());
             Label pionsBateau = new Label("Pions bateaux : "+j.getNbPionsBateau());
             label.setTextFill(Color.web(getCouleur(j)));
+            VBox destinations = new VBox();
+            for (IDestination d : j.getDestinations()){
+                StringBuilder villesDest = new StringBuilder("-> ");
+                for(String v : d.getVilles()){
+                    villesDest.append(v).append(" - ");
+                }
+                villesDest.replace(villesDest.length()-3, villesDest.length()-1, ""); //Permet d'enlever le dernier tiret
+                Label uneDestination = new Label(villesDest.toString());
+                destinations.getChildren().add(uneDestination);
+            }
             principal.getChildren().addAll(pionsWagon, pionsBateau);
             profil.getChildren().add(label);
             label.setFont(new Font("Arial", 20));
+            principal.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    principal.getChildren().add(destinations);
+                }
+            });
+            principal.setOnMouseExited(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    principal.getChildren().remove(destinations);
+                }
+            });
         }
     }
 
