@@ -52,6 +52,8 @@ public class VueDuJeu extends BorderPane {
         pioches = new VuePioche(jeu);
         choixEtInstruction = new VBox(); //Pour des boutons pions et les instructions
 
+        autresJoueurs.setScaleZ(100);
+        plateau.setScaleZ(10);
 
 
         this.setRight(autresJoueurs);
