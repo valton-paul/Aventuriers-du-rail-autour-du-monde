@@ -1,9 +1,8 @@
 package fr.umontpellier.iut.rails.vues;
 
-import fr.umontpellier.iut.rails.ICarteTransport;
-import fr.umontpellier.iut.rails.IDestination;
-import fr.umontpellier.iut.rails.IJeu;
-import fr.umontpellier.iut.rails.IJoueur;
+import fr.umontpellier.iut.rails.*;
+import fr.umontpellier.iut.rails.mecanique.Jeu;
+import fr.umontpellier.iut.rails.mecanique.Route;
 import fr.umontpellier.iut.rails.mecanique.data.Ville;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
@@ -15,15 +14,17 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 
+import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * Cette classe présente les éléments appartenant au joueur courant.
@@ -32,11 +33,12 @@ import java.util.HashMap;
  */
 public class VueJoueurCourant extends ScrollPane {
     private final VBox cartesTransport;
+
     public VueJoueurCourant(IJeu jeu, String lien) {
 
         VBox principal = new VBox();
         HBox profil = new HBox();
-        ImageView img = new ImageView(new Image("images/cartesWagons/"+lien+".png"));
+        ImageView img = new ImageView(new Image("images/cartesWagons/" + lien + ".png"));
         img.setFitHeight(75);
         img.setFitWidth(60);
         profil.getChildren().add(img);
@@ -69,20 +71,29 @@ public class VueJoueurCourant extends ScrollPane {
 
         // on affiche les destinations
         VBox destinations = new VBox();
-        for (IDestination d : jeu.joueurCourantProperty().get().getDestinations()){
+        for (IDestination d : jeu.joueurCourantProperty().get().getDestinations()) {
             StringBuilder villesDest = new StringBuilder("-> ");
-            for(String v : d.getVilles()){
+            for (String v : d.getVilles()) {
                 villesDest.append(v).append(" - ");
             }
-            villesDest.replace(villesDest.length()-3, villesDest.length()-1, ""); //Permet d'enlever le dernier tiret
+            villesDest.replace(villesDest.length() - 3, villesDest.length() - 1, ""); //Permet d'enlever le dernier tiret
             Label uneDestination = new Label(villesDest.toString());
+            uneDestination.setOnMouseEntered(event -> {
+                trouverVilles(d.getVilles(), true);
+                uneDestination.setTextFill(Color.BROWN);
+            });
+            uneDestination.setOnMouseExited(event -> {
+                trouverVilles(d.getVilles(), false);
+                uneDestination.setTextFill(Color.BLACK);
+
+            });
             destinations.getChildren().add(uneDestination);
         }
         principal.getChildren().add(cartesTransport);
         principal.getChildren().add(destinations);
 
-        for(ICarteTransport carte : jeu.joueurCourantProperty().get().getCartesTransport()){
-            if(carte.estBateau()){
+        for (ICarteTransport carte : jeu.joueurCourantProperty().get().getCartesTransport()) {
+            if (carte.estBateau()) {
                 continue;
             }
         }
@@ -116,44 +127,35 @@ public class VueJoueurCourant extends ScrollPane {
             public void onChanged(Change<? extends ICarteTransport> change) {
                 change.next();
                 if (change.wasAdded()) {
-                    for(ICarteTransport carte : change.getAddedSubList())
-                    {
+                    for (ICarteTransport carte : change.getAddedSubList()) {
                         VueCarteTransport vue = new VueCarteTransport(carte, 1, true);
                         vue.createBinding();
                         boolean ajouter = false;
-                        for(Node node : cartesTransport.getChildren())
-                        {
+                        for (Node node : cartesTransport.getChildren()) {
                             HBox lesCartes = (HBox) node;
-                            if(lesCartes.getChildren().size() < 4)
-                            {
+                            if (lesCartes.getChildren().size() < 4) {
                                 lesCartes.getChildren().add(vue);
                                 ajouter = true;
                                 break;
                             }
                         }
-                        if (!ajouter)
-                        {
+                        if (!ajouter) {
                             HBox lesCartes = new HBox();
                             lesCartes.getChildren().add(vue);
                             cartesTransport.getChildren().add(lesCartes);
                         }
                     }
-                }
-                else if (change.wasRemoved())
-                {
-                    for(ICarteTransport carte : change.getRemoved())
-                    {
-                        all :
-                       for(Node node : cartesTransport.getChildren())
-                       {
-                           HBox hbox = (HBox) node;
-                           for(Node node1 : hbox.getChildren())
-                           {
-                               VueCarteTransport vue = (VueCarteTransport) node1;
-                                if(carte.equals(vue.getCarteTransport())) hbox.getChildren().remove(vue);
-                               break all;
-                           }
-                       }
+                } else if (change.wasRemoved()) {
+                    for (ICarteTransport carte : change.getRemoved()) {
+                        all:
+                        for (Node node : cartesTransport.getChildren()) {
+                            HBox hbox = (HBox) node;
+                            for (Node node1 : hbox.getChildren()) {
+                                VueCarteTransport vue = (VueCarteTransport) node1;
+                                if (carte.equals(vue.getCarteTransport())) hbox.getChildren().remove(vue);
+                                break all;
+                            }
+                        }
                     }
                 }
             }
@@ -172,4 +174,20 @@ public class VueJoueurCourant extends ScrollPane {
         return color;
     }
 
+
+    public void trouverVilles(List<String> villes, boolean briller) {
+        ArrayList<Ville> toutesLesVilles = new ArrayList<>();
+        for (Node s : ((VueDuJeu) getScene().getRoot()).getPlateau().getChildren()) {
+            if (s instanceof Circle) {
+                if(villes.contains(s.getId())){
+                    if(briller){
+                        s.setOpacity(1);
+                        ((Circle) s).setFill(Color.GOLD);
+                    }
+                    else s.setOpacity(0);
+                }
+
+            }
+        }
+    }
 }

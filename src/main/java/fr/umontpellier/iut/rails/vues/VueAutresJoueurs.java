@@ -45,7 +45,7 @@ public class VueAutresJoueurs extends VBox {
     public VueAutresJoueurs()
     {
         this.setSpacing(20);
-        this.setPadding(new Insets(0, 10 ,0 ,10));
+        //this.setPadding(new Insets(0, 10 ,0 ,10));
     }
 
     public static void setImages(HashMap<String, String> images)

@@ -11,6 +11,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.shape.Shape;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -649,5 +650,6 @@ public class Jeu implements IJeu {
         Joueur leJoueur = ((Joueur) joueurCourant.getValue());
         leJoueur.getEtatCourant().construirePort(nom);
     }
+
 
 }
