@@ -295,5 +295,20 @@ public class VuePioche extends HBox {
                 }
             }
         });
+
+        ((VueDuJeu)getScene().getRoot()).getJeu().piocheBateauVideProperty().addListener((value, old, newValue)->{
+            if(!newValue) toutSafuInstruction.getChildren().add(3, piocheBateauButton);
+            else toutSafuInstruction.getChildren().remove(piocheBateauButton);
+        });
+
+        ((VueDuJeu)getScene().getRoot()).getJeu().piocheWagonVideProperty().addListener((value, old, newValue)->{
+            if(newValue) toutSafuInstruction.getChildren().add(2, piocheWagonButton);
+            else toutSafuInstruction.getChildren().remove(piocheWagonButton);
+        });
+
+        ((VueDuJeu)getScene().getRoot()).getJeu().piocheDestinationVideProperty().addListener((value, old, newValue)->{
+            if(newValue) toutSafuInstruction.getChildren().add(1, piocheDest);
+            else toutSafuInstruction.getChildren().remove(piocheDest);
+        });
     }
 }
