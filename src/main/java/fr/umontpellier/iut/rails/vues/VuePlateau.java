@@ -102,6 +102,7 @@ public class VuePlateau extends Pane {
                                     rect.setOpacity(1);
                                     Image img = new Image("images/wagons/image-wagon-" + ((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().get().getCouleur().toString().toUpperCase() + ".png");
                                     rect.setFill(new ImagePattern(img));
+                                    rect.setStrokeWidth(0);
                                 }
                             } else if (node instanceof Circle circle) {
                                 if (circle.getId().equals(dernierNodeAppuyer.getId())) {
