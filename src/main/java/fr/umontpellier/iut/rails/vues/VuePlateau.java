@@ -103,6 +103,10 @@ public class VuePlateau extends Pane {
                                     Image img = new Image("images/wagons/image-wagon-" + ((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().get().getCouleur().toString().toUpperCase() + ".png");
                                     rect.setFill(new ImagePattern(img));
                                     rect.setStrokeWidth(0);
+                                    TranslateTransition rectTransition = new TranslateTransition(Duration.seconds(1), rect);
+                                    rectTransition.setFromY(-getScene().getHeight());
+                                    rectTransition.setToY(0);
+                                    rectTransition.play();
                                 }
                             } else if (node instanceof Circle circle) {
                                 if (circle.getId().equals(dernierNodeAppuyer.getId())) {
