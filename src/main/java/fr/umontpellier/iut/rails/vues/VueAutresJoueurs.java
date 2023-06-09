@@ -5,12 +5,14 @@ import fr.umontpellier.iut.rails.IDestination;
 import fr.umontpellier.iut.rails.IJeu;
 import fr.umontpellier.iut.rails.IJoueur;
 import fr.umontpellier.iut.rails.mecanique.Joueur;
+import fr.umontpellier.iut.rails.mecanique.data.Ville;
 import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -26,11 +28,13 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -118,6 +122,12 @@ public class VueAutresJoueurs extends VBox {
                 villesDest.replace(villesDest.length()-3, villesDest.length()-1, ""); //Permet d'enlever le dernier tiret
                 Label uneDestination = new Label(villesDest.toString());
                 destinations.getChildren().add(uneDestination);
+                uneDestination.setOnMouseEntered(e->{
+                    trouverVilles(d.getVilles(), true);
+                });
+                uneDestination.setOnMouseExited(e->{
+                    trouverVilles(d.getVilles(), false);
+                });
             }
             principal.getChildren().addAll(pionsWagon, pionsBateau);
             profil.getChildren().add(label);
@@ -153,5 +163,20 @@ public class VueAutresJoueurs extends VBox {
             case ROUGE -> color = "RED";
         }
         return color;
+    }
+
+    public void trouverVilles(List<String> villes, boolean briller) {
+        ArrayList<Ville> toutesLesVilles = new ArrayList<>();
+        for (Node s : ((VueDuJeu) getScene().getRoot()).getPlateau().getChildren()) {
+            if (s instanceof Circle) {
+                if(villes.contains(s.getId())){
+                    if(briller){
+                        s.setOpacity(1);
+                        ((Circle) s).setFill(Color.GOLD);
+                    }
+                    else s.setOpacity(0);
+                }
+            }
+        }
     }
 }
